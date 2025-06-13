@@ -1,5 +1,6 @@
 package com.agendasim.dao;
 
+import com.agendasim.exception.RecursoNaoEncontradoException;
 import com.agendasim.model.Empresa;
 import com.agendasim.repository.EmpresaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class EmpresaDAOImpl implements EmpresaDAO {
 
     @Override
     public void excluir(Long id) {
+    if (!empresaRepository.existsById(id)) {
+            throw new RecursoNaoEncontradoException("Empresa com ID " + id + " não encontrado");
+        }
         empresaRepository.deleteById(id);
     }
 

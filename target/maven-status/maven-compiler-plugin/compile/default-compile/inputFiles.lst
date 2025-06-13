@@ -5,6 +5,7 @@ C:\Projetos\agendasim\src\main\java\com\agendasim\dao\EmpresaDAO.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\dao\EmpresaDAOImpl.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\dao\ServicoDAO.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\dao\ServicoDAOImpl.java
+C:\Projetos\agendasim\src\main\java\com\agendasim\exception\RecursoNaoEncontradoException.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\exception\ValidationExceptionHandler.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\model\Empresa.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\model\Servico.java

@@ -1,1 +1,2 @@
 com\agendasim\AgendasimApplication.class
+com\agendasim\exception\RecursoNaoEncontradoException.class

@@ -1,9 +1,11 @@
 package com.agendasim.dao;
 
+import com.agendasim.exception.RecursoNaoEncontradoException;
 import com.agendasim.model.Servico;
 import com.agendasim.repository.ServicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 
 import java.util.List;
 
@@ -30,8 +32,12 @@ public class ServicoDAOImpl implements ServicoDAO {
 
     @Override
     public void excluir(Long id) {
+        if (!servicoRepository.existsById(id)) {
+            throw new RecursoNaoEncontradoException("Serviço com ID " + id + " não encontrado");
+        }
         servicoRepository.deleteById(id);
     }
+
 
     @Override
     public Servico atualizar(Long id, Servico servico) {
