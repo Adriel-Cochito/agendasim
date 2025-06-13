@@ -1,0 +1,37 @@
+package com.agendasim.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import com.agendasim.dao.EmpresaDAO;
+import com.agendasim.model.Empresa;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/empresas")
+public class EmpresaController {
+
+    @Autowired
+    private EmpresaDAO empresaDAO;
+
+    @GetMapping
+    public List<Empresa> listar() {
+        return empresaDAO.listarTodas();
+    }
+
+    @PostMapping
+    public Empresa criar(@RequestBody Empresa empresa) {
+        return empresaDAO.salvar(empresa);
+    }
+
+    @GetMapping("/{id}")
+    public Empresa buscarPorId(@PathVariable Long id) {
+        return empresaDAO.buscarPorId(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void excluir(@PathVariable Long id) {
+        empresaDAO.excluir(id);
+    }
+}
