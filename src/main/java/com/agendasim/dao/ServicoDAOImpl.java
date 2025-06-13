@@ -41,7 +41,8 @@ public class ServicoDAOImpl implements ServicoDAO {
 
     @Override
     public Servico atualizar(Long id, Servico servico) {
-        Servico existente = servicoRepository.findById(id).orElse(null);
+    Servico existente = servicoRepository.findById(id)
+        .orElseThrow(() -> new RecursoNaoEncontradoException("Serviço com ID " + id + " não encontrado"));
         if (existente != null) {
             existente.setTitulo(servico.getTitulo());
             existente.setDescricao(servico.getDescricao());
