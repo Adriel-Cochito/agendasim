@@ -1,14 +1,13 @@
 package com.agendasim.dao;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.agendasim.model.Empresa;
 import com.agendasim.repository.EmpresaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Component
+@Repository
 public class EmpresaDAOImpl implements EmpresaDAO {
 
     @Autowired
@@ -46,5 +45,4 @@ public class EmpresaDAOImpl implements EmpresaDAO {
         }
         return null;
     }
-
 }

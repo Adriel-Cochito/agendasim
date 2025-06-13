@@ -1,10 +1,10 @@
-package com.agendasim.dao;
+package com.agendasim.service;
 
 import com.agendasim.model.Empresa;
 
 import java.util.List;
 
-public interface EmpresaDAO {
+public interface EmpresaService {
     List<Empresa> listarTodas();
     Empresa salvar(Empresa empresa);
     Empresa buscarPorId(Long id);
