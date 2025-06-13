@@ -1,7 +1,6 @@
 package com.agendasim.dao;
 
 import com.agendasim.model.Empresa;
-
 import java.util.List;
 
 public interface EmpresaDAO {
