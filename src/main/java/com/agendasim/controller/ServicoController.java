@@ -2,6 +2,9 @@ package com.agendasim.controller;
 
 import com.agendasim.model.Servico;
 import com.agendasim.service.ServicoService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +23,7 @@ public class ServicoController {
     }
 
     @PostMapping
-    public Servico criar(@RequestBody Servico servico) {
+    public Servico criar(@Valid @RequestBody Servico servico) {
         return servicoService.criar(servico);
     }
 
