@@ -1,0 +1,45 @@
+package com.agendasim.service;
+
+import com.agendasim.dao.ServicoDAO;
+import com.agendasim.model.Servico;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class ServicoServiceImpl implements ServicoService {
+
+    @Autowired
+    private ServicoDAO servicoDAO;
+
+    @Override
+    public List<Servico> listarTodos() {
+        return servicoDAO.listarTodos();
+    }
+
+    @Override
+    public Servico criar(Servico servico) {
+        return servicoDAO.salvar(servico);
+    }
+
+    @Override
+    public Servico buscarPorId(Long id) {
+        return servicoDAO.buscarPorId(id);
+    }
+
+    @Override
+    public void excluir(Long id) {
+        servicoDAO.excluir(id);
+    }
+
+    @Override
+    public Servico atualizar(Long id, Servico servico) {
+        return servicoDAO.atualizar(id, servico);
+    }
+
+    @Override
+    public List<Servico> listarPorEmpresa(Long empresaId) {
+        return servicoDAO.listarPorEmpresa(empresaId);
+    }
+}
