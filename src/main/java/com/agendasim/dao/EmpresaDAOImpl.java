@@ -33,4 +33,18 @@ public class EmpresaDAOImpl implements EmpresaDAO {
     public void excluir(Long id) {
         empresaRepository.deleteById(id);
     }
+
+    @Override
+    public Empresa atualizar(Long id, Empresa empresa) {
+        Empresa existente = empresaRepository.findById(id).orElse(null);
+        if (existente != null) {
+            existente.setNome(empresa.getNome());
+            existente.setEmail(empresa.getEmail());
+            existente.setTelefone(empresa.getTelefone());
+            existente.setCnpj(empresa.getCnpj());
+            return empresaRepository.save(existente);
+        }
+        return null;
+    }
+
 }

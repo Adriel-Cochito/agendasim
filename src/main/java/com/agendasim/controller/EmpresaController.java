@@ -34,4 +34,10 @@ public class EmpresaController {
     public void excluir(@PathVariable Long id) {
         empresaDAO.excluir(id);
     }
+
+    @PutMapping("/{id}")
+    public Empresa atualizar(@PathVariable Long id, @RequestBody Empresa empresa) {
+        return empresaDAO.atualizar(id, empresa);
+    }
+
 }
