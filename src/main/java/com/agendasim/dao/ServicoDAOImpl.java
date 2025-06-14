@@ -50,6 +50,7 @@ public class ServicoDAOImpl implements ServicoDAO {
             existente.setTitulo(servico.getTitulo());
             existente.setDescricao(servico.getDescricao());
             existente.setPreco(servico.getPreco());
+            existente.setDuracao(servico.getDuracao());
             existente.setEmpresaId(servico.getEmpresaId());
             return servicoRepository.save(existente);
         }

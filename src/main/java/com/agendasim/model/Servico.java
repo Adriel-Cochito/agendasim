@@ -24,6 +24,10 @@ public class Servico {
     @NotNull(message = "O preço é obrigatório")
     @Positive(message = "O preço deve ser maior que zero")
     private Double preco;
+
+    @NotNull(message = "A duracao é obrigatório")
+    @Positive(message = "A duracao deve ser maior que zero")
+    private Integer duracao;
     
     @NotNull(message = "O ID da empresa é obrigatório")
     private Long empresaId;
