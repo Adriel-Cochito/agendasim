@@ -44,7 +44,7 @@ public class AgendaServiceImpl implements AgendaService {
     }
 
     @Override
-    public List<Agenda> listarPorServico(Long servicoId) {
-        return agendaDAO.listarPorServico(servicoId);
+    public List<Agenda> listarPorServico(Long servicoId, Long empresaId) {
+        return agendaDAO.listarPorServico(servicoId,empresaId);
     }
 }

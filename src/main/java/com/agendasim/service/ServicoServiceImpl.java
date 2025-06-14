@@ -24,9 +24,10 @@ public class ServicoServiceImpl implements ServicoService {
     }
 
     @Override
-    public Servico buscarPorId(Long id) {
-        return servicoDAO.buscarPorId(id);
+    public Servico buscarPorId(Long id, Long empresaId) {
+        return servicoDAO.buscarPorId(id, empresaId);
     }
+
 
     @Override
     public void excluir(Long id) {

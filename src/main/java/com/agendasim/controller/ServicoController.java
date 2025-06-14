@@ -6,6 +6,7 @@ import com.agendasim.service.ServicoService;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,33 +18,42 @@ public class ServicoController {
     @Autowired
     private ServicoService servicoService;
 
+    // LISTAR (sempre requer empresaId)
     @GetMapping
-    public List<Servico> listarTodos() {
-        return servicoService.listarTodos();
+    public ResponseEntity<List<Servico>> listarPorEmpresa(@RequestParam Long empresaId) {
+        return ResponseEntity.ok(servicoService.listarPorEmpresa(empresaId));
     }
 
+    // CRIAR – empresaId vem no query‑param, atribuímos antes de salvar
     @PostMapping
-    public Servico criar(@Valid @RequestBody Servico servico) {
-        return servicoService.criar(servico);
+    public ResponseEntity<Servico> criar(@RequestParam Long empresaId,
+                                         @Valid @RequestBody Servico servico) {
+        servico.setEmpresaId(empresaId);
+        return ResponseEntity.ok(servicoService.criar(servico));
     }
 
+    // BUSCAR POR ID
     @GetMapping("/{id}")
-    public Servico buscarPorId(@PathVariable Long id) {
-        return servicoService.buscarPorId(id);
+    public ResponseEntity<Servico> buscar(@PathVariable Long id,
+                                          @RequestParam Long empresaId) {
+        return ResponseEntity.ok(servicoService.buscarPorId(id, empresaId));
     }
 
+    // ATUALIZAR
     @PutMapping("/{id}")
-    public Servico atualizar(@PathVariable Long id, @RequestBody Servico servico) {
-        return servicoService.atualizar(id, servico);
+    public ResponseEntity<Servico> atualizar(@PathVariable Long id,
+                                             @RequestParam Long empresaId,
+                                             @Valid @RequestBody Servico servico) {
+        servico.setEmpresaId(empresaId);
+        return ResponseEntity.ok(servicoService.atualizar(id, servico));
     }
 
+    // EXCLUIR
     @DeleteMapping("/{id}")
-    public void excluir(@PathVariable Long id) {
-        servicoService.excluir(id);
-    }
-
-    @GetMapping("/empresa/{empresaId}")
-    public List<Servico> listarPorEmpresa(@PathVariable Long empresaId) {
-        return servicoService.listarPorEmpresa(empresaId);
+    public ResponseEntity<Void> excluir(@PathVariable Long id,
+                                        @RequestParam Long empresaId) {
+        servicoService.excluir(id);   // opcional: crie o método que cheque empresa
+        return ResponseEntity.noContent().build();
     }
 }
+

@@ -26,10 +26,12 @@ public class ServicoDAOImpl implements ServicoDAO {
     }
 
     @Override
-    public Servico buscarPorId(Long id) {
-        return servicoRepository.findById(id)
-        .orElseThrow(() -> new RecursoNaoEncontradoException("Serviço com ID " + id + " não encontrado"));
+    public Servico buscarPorId(Long id, Long empresaId) {
+        return servicoRepository.findByIdAndEmpresaId(id, empresaId)
+                .orElseThrow(() -> new RecursoNaoEncontradoException(
+                        "Serviço id=" + id + " não encontrado para empresa id=" + empresaId));
     }
+
 
     @Override
     public void excluir(Long id) {

@@ -24,11 +24,6 @@ public class AgendaDAOImpl implements AgendaDAO {
         return agendaRepository.save(agenda);
     }
 
-    @Override
-    public Agenda buscarPorId(Long id) {
-        return agendaRepository.findById(id)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Agenda não encontrada com ID: " + id));
-    }
 
     @Override
     public void excluir(Long id) {
@@ -52,13 +47,24 @@ public class AgendaDAOImpl implements AgendaDAO {
         return agendaRepository.save(existente);
     }
 
+
+
+@Override
+public Agenda buscarPorId(Long id) {
+    return agendaRepository.findById(id)
+            .orElseThrow(() -> new RecursoNaoEncontradoException(
+                    "Agenda id=" + id + " não encontrada" ));
+}
+
+    @Override
+    public List<Agenda> listarPorServico(Long servicoId, Long empresaId) {
+        return agendaRepository.findByServicoIdAndEmpresaId(servicoId, empresaId);
+    }
+
     @Override
     public List<Agenda> listarPorEmpresa(Long empresaId) {
         return agendaRepository.findByEmpresaId(empresaId);
     }
 
-    @Override
-    public List<Agenda> listarPorServico(Long servicoId) {
-        return agendaRepository.findByServicoId(servicoId);
-    }
+
 }

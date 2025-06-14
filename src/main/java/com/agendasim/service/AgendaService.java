@@ -11,5 +11,5 @@ public interface AgendaService {
     void excluir(Long id);
     Agenda atualizar(Long id, Agenda agenda);
     List<Agenda> listarPorEmpresa(Long empresaId);
-    List<Agenda> listarPorServico(Long servicoId);
+    List<Agenda> listarPorServico(Long servicoId, Long empresaId);
 }
