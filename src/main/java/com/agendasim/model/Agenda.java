@@ -26,6 +26,9 @@ public class Agenda {
     @NotNull(message = "O ID da empresa é obrigatório")
     private Long empresaId;
 
+    @NotNull(message = "O ID da empresa é obrigatório")
+    private Long profissionalId;
+
     @NotNull(message = "O ID do serviço é obrigatório")
     private Long servicoId;
 
