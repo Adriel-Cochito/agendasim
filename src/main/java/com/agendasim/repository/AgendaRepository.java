@@ -9,13 +9,8 @@ import java.util.Optional;
 
 @Repository
 public interface AgendaRepository extends JpaRepository<Agenda, Long> {
-
     List<Agenda> findByServicoId(Long servicoId);
-
     List<Agenda> findByEmpresaId(Long empresaId);
-
     List<Agenda> findByServicoIdAndEmpresaId(Long servicoId, Long empresaId);
-
-    Optional<Agenda> findByIdAndEmpresaId(Long id, Long empresaId);    // ★ novo
-    
+    Optional<Agenda> findByIdAndEmpresaId(Long id, Long empresaId);
 }

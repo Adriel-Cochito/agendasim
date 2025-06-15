@@ -12,53 +12,42 @@ import java.util.List;
 @RestController
 @RequestMapping("/agendas")
 public class AgendaController {
-
     @Autowired
     private AgendaService agendaService;
 
-    // LISTAR agendas de uma empresa
     @GetMapping
     public ResponseEntity<List<Agenda>> listarPorEmpresa(@RequestParam Long empresaId) {
         return ResponseEntity.ok(agendaService.listarPorEmpresa(empresaId));
     }
 
-    // CRIAR
     @PostMapping
     public ResponseEntity<Agenda> criar(@RequestParam Long empresaId,
                                         @Valid @RequestBody Agenda agenda) {
-        agenda.setEmpresaId(empresaId);
-        return ResponseEntity.ok(agendaService.criar(agenda));
+        return ResponseEntity.ok(agendaService.criar(agenda, empresaId));
     }
 
-    // BUSCAR POR ID
+
     @GetMapping("/{id}")
-    public ResponseEntity<Agenda> buscar(@PathVariable Long id,
-                                         @RequestParam Long empresaId) {
+    public ResponseEntity<Agenda> buscar(@PathVariable Long id, @RequestParam Long empresaId) {
         return ResponseEntity.ok(agendaService.buscarPorId(id));
     }
 
-    // ATUALIZAR
     @PutMapping("/{id}")
     public ResponseEntity<Agenda> atualizar(@PathVariable Long id,
                                             @RequestParam Long empresaId,
                                             @Valid @RequestBody Agenda agenda) {
-        agenda.setEmpresaId(empresaId);
-        return ResponseEntity.ok(agendaService.atualizar(id, agenda));
+        return ResponseEntity.ok(agendaService.atualizar(id, agenda, empresaId));
     }
 
-    // EXCLUIR
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(@PathVariable Long id,
-                                        @RequestParam Long empresaId) {
-        agendaService.excluir(id);   // idem: implementar verificação se desejar
+    public ResponseEntity<Void> excluir(@PathVariable Long id, @RequestParam Long empresaId) {
+        agendaService.excluir(id);
         return ResponseEntity.noContent().build();
     }
 
-    // LISTAR agendas de um serviço específico (dentro da empresa)
     @GetMapping("/servico/{servicoId}")
-    public ResponseEntity<List<Agenda>> listarPorServico(@PathVariable Long servicoId,
-                                                         @RequestParam Long empresaId) {
+    public ResponseEntity<List<Agenda>> listarPorServico(@PathVariable Long servicoId, @RequestParam Long empresaId) {
         return ResponseEntity.ok(agendaService.listarPorServico(servicoId, empresaId));
     }
 }
-

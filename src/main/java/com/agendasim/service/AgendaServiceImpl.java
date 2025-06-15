@@ -2,14 +2,14 @@ package com.agendasim.service;
 
 import com.agendasim.dao.AgendaDAO;
 import com.agendasim.model.Agenda;
+import com.agendasim.model.Empresa;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
 public class AgendaServiceImpl implements AgendaService {
-
     @Autowired
     private AgendaDAO agendaDAO;
 
@@ -19,9 +19,14 @@ public class AgendaServiceImpl implements AgendaService {
     }
 
     @Override
-    public Agenda criar(Agenda agenda) {
+    public Agenda criar(Agenda agenda, Long empresaId) {
+        Empresa empresa = new Empresa();
+        empresa.setId(empresaId);
+        agenda.setEmpresa(empresa);
+
         return agendaDAO.salvar(agenda);
     }
+
 
     @Override
     public Agenda buscarPorId(Long id) {
@@ -34,9 +39,15 @@ public class AgendaServiceImpl implements AgendaService {
     }
 
     @Override
-    public Agenda atualizar(Long id, Agenda agenda) {
+    public Agenda atualizar(Long id, Agenda agenda, Long empresaId) {
+        // Aqui você define a empresa no objeto agenda
+        Empresa empresa = new Empresa();
+        empresa.setId(empresaId);
+        agenda.setEmpresa(empresa);
+
         return agendaDAO.atualizar(id, agenda);
     }
+
 
     @Override
     public List<Agenda> listarPorEmpresa(Long empresaId) {
@@ -45,6 +56,6 @@ public class AgendaServiceImpl implements AgendaService {
 
     @Override
     public List<Agenda> listarPorServico(Long servicoId, Long empresaId) {
-        return agendaDAO.listarPorServico(servicoId,empresaId);
+        return agendaDAO.listarPorServico(servicoId, empresaId);
     }
 }

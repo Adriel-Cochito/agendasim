@@ -10,7 +10,6 @@ import java.util.List;
 
 @Repository
 public class AgendaDAOImpl implements AgendaDAO {
-
     @Autowired
     private AgendaRepository agendaRepository;
 
@@ -23,7 +22,6 @@ public class AgendaDAOImpl implements AgendaDAO {
     public Agenda salvar(Agenda agenda) {
         return agendaRepository.save(agenda);
     }
-
 
     @Override
     public void excluir(Long id) {
@@ -39,23 +37,20 @@ public class AgendaDAOImpl implements AgendaDAO {
 
         existente.setNomeCliente(agenda.getNomeCliente());
         existente.setTelefoneCliente(agenda.getTelefoneCliente());
-        existente.setProfissionalId(agenda.getProfissionalId());
-        existente.setEmpresaId(agenda.getEmpresaId());
-        existente.setServicoId(agenda.getServicoId());
         existente.setDataHora(agenda.getDataHora());
         existente.setStatus(agenda.getStatus());
+        existente.setServico(agenda.getServico());
+        existente.setProfissional(agenda.getProfissional());
+        existente.setEmpresa(agenda.getEmpresa());
 
         return agendaRepository.save(existente);
     }
 
-
-
-@Override
-public Agenda buscarPorId(Long id) {
-    return agendaRepository.findById(id)
-            .orElseThrow(() -> new RecursoNaoEncontradoException(
-                    "Agenda id=" + id + " não encontrada" ));
-}
+    @Override
+    public Agenda buscarPorId(Long id) {
+        return agendaRepository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Agenda id=" + id + " não encontrada"));
+    }
 
     @Override
     public List<Agenda> listarPorServico(Long servicoId, Long empresaId) {
@@ -66,6 +61,4 @@ public Agenda buscarPorId(Long id) {
     public List<Agenda> listarPorEmpresa(Long empresaId) {
         return agendaRepository.findByEmpresaId(empresaId);
     }
-
-
 }
