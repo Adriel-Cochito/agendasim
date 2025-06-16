@@ -3,6 +3,8 @@ C:\Projetos\agendasim\src\main\java\com\agendasim\controller\AgendaController.ja
 C:\Projetos\agendasim\src\main\java\com\agendasim\controller\EmpresaController.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\controller\ProfissionalController.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\controller\ServicoController.java
+C:\Projetos\agendasim\src\main\java\com\agendasim\dao\AgendaAdminDAO.java
+C:\Projetos\agendasim\src\main\java\com\agendasim\dao\AgendaClienteDAO.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\dao\AgendaDAO.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\dao\AgendaDAOImpl.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\dao\EmpresaDAO.java
@@ -13,6 +15,7 @@ C:\Projetos\agendasim\src\main\java\com\agendasim\dao\ServicoDAO.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\dao\ServicoDAOImpl.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\exception\RecursoNaoEncontradoException.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\exception\ValidationExceptionHandler.java
+C:\Projetos\agendasim\src\main\java\com\agendasim\mapper\AgendaMapper.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\model\Agenda.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\model\Empresa.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\model\Profissional.java

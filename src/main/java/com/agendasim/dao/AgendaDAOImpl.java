@@ -3,6 +3,11 @@ package com.agendasim.dao;
 import com.agendasim.exception.RecursoNaoEncontradoException;
 import com.agendasim.model.Agenda;
 import com.agendasim.repository.AgendaRepository;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -10,8 +15,12 @@ import java.util.List;
 
 @Repository
 public class AgendaDAOImpl implements AgendaDAO {
+
     @Autowired
     private AgendaRepository agendaRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public List<Agenda> listarTodos() {
@@ -61,4 +70,16 @@ public class AgendaDAOImpl implements AgendaDAO {
     public List<Agenda> listarPorEmpresa(Long empresaId) {
         return agendaRepository.findByEmpresaId(empresaId);
     }
+
+        @Override
+    public List<Agenda> listarPorEmpresaEServicoEProfissional(Long empresaId, Long servicoId, Long profissionalId) {
+        String jpql = "SELECT a FROM Agenda a WHERE a.empresa.id = :empresaId AND a.servico.id = :servicoId AND a.profissional.id = :profissionalId";
+        TypedQuery<Agenda> query = entityManager.createQuery(jpql, Agenda.class);
+        query.setParameter("empresaId", empresaId);
+        query.setParameter("servicoId", servicoId);
+        query.setParameter("profissionalId", profissionalId);
+
+        return query.getResultList();
+    }
+
 }

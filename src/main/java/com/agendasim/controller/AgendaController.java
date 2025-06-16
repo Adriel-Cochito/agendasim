@@ -1,5 +1,7 @@
 package com.agendasim.controller;
 
+import com.agendasim.dao.AgendaAdminDAO;
+import com.agendasim.dao.AgendaClienteDAO;
 import com.agendasim.model.Agenda;
 import com.agendasim.service.AgendaService;
 import jakarta.validation.Valid;
@@ -50,4 +52,18 @@ public class AgendaController {
     public ResponseEntity<List<Agenda>> listarPorServico(@PathVariable Long servicoId, @RequestParam Long empresaId) {
         return ResponseEntity.ok(agendaService.listarPorServico(servicoId, empresaId));
     }
+
+    @GetMapping("/admin")
+    public ResponseEntity<List<AgendaAdminDAO>> listarParaAdmin(@RequestParam Long empresaId) {
+        return ResponseEntity.ok(agendaService.listarParaAdmin(empresaId));
+    }
+
+    @GetMapping("/cliente")
+    public ResponseEntity<List<AgendaClienteDAO>> listarParaCliente(
+            @RequestParam Long empresaId,
+            @RequestParam Long servicoId,
+            @RequestParam Long profissionalId) {
+        return ResponseEntity.ok(agendaService.listarParaCliente(empresaId, servicoId, profissionalId));
+    }
+
 }

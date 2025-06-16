@@ -11,4 +11,7 @@ public interface AgendaDAO {
     List<Agenda> listarPorEmpresa(Long empresaId);
     Agenda buscarPorId(Long id);
     List<Agenda> listarPorServico(Long servicoId, Long empresaId);
+    List<Agenda> listarPorEmpresaEServicoEProfissional(Long empresaId, Long servicoId, Long profissionalId);
+
+
 }

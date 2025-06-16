@@ -1,6 +1,9 @@
 package com.agendasim.service;
 
+import com.agendasim.dao.AgendaAdminDAO;
+import com.agendasim.dao.AgendaClienteDAO;
 import com.agendasim.dao.AgendaDAO;
+import com.agendasim.mapper.AgendaMapper;
 import com.agendasim.model.Agenda;
 import com.agendasim.model.Empresa;
 
@@ -58,4 +61,17 @@ public class AgendaServiceImpl implements AgendaService {
     public List<Agenda> listarPorServico(Long servicoId, Long empresaId) {
         return agendaDAO.listarPorServico(servicoId, empresaId);
     }
+
+    @Override
+    public List<AgendaAdminDAO> listarParaAdmin(Long empresaId) {
+        return AgendaMapper.toAdminDAOList(agendaDAO.listarPorEmpresa(empresaId));
+    }
+
+    @Override
+    public List<AgendaClienteDAO> listarParaCliente(Long empresaId, Long servicoId, Long profissionalId) {
+        return AgendaMapper.toClienteDAOList(
+            agendaDAO.listarPorEmpresaEServicoEProfissional(empresaId, servicoId, profissionalId)
+        );
+    }
+
 }
