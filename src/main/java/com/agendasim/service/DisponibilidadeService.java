@@ -6,7 +6,10 @@ import java.util.List;
 
 public interface DisponibilidadeService {
     Disponibilidade salvar(Disponibilidade disponibilidade);
+    Disponibilidade atualizar(Long id, Disponibilidade disponibilidade);
+    Disponibilidade buscarPorId(Long id);
     void deletar(Long id);
     List<Disponibilidade> listarPorProfissional(Long profissionalId);
     List<Disponibilidade> listarPorEmpresaEProfissional(Long empresaId, Long profissionalId);
 }
+

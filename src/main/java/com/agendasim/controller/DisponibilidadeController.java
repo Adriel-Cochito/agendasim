@@ -16,14 +16,19 @@ public class DisponibilidadeController {
     @Autowired
     private DisponibilidadeService disponibilidadeService;
 
-        @GetMapping("/{id}")
-    public ResponseEntity<Disponibilidade> buscar(@PathVariable Long id, @RequestParam Long empresaId) {
-        return ResponseEntity.ok(disponibilidadeService.buscarPorId(id));
-    }
-
     @PostMapping
     public ResponseEntity<Disponibilidade> salvar(@Valid @RequestBody Disponibilidade disponibilidade) {
         return ResponseEntity.ok(disponibilidadeService.salvar(disponibilidade));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Disponibilidade> atualizar(@PathVariable Long id, @Valid @RequestBody Disponibilidade disponibilidade) {
+        return ResponseEntity.ok(disponibilidadeService.atualizar(id, disponibilidade));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Disponibilidade> buscar(@PathVariable Long id) {
+        return ResponseEntity.ok(disponibilidadeService.buscarPorId(id));
     }
 
     @DeleteMapping("/{id}")
@@ -38,3 +43,4 @@ public class DisponibilidadeController {
         return ResponseEntity.ok(disponibilidadeService.listarPorEmpresaEProfissional(empresaId, profissionalId));
     }
 }
+
