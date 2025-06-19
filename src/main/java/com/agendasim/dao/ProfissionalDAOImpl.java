@@ -44,6 +44,7 @@ public class ProfissionalDAOImpl implements ProfissionalDAO {
 
         existente.setNome(profissional.getNome());
         existente.setEmail(profissional.getEmail());
+        existente.setAtivo(profissional.getAtivo());
         existente.setGoogleAccessToken(profissional.getGoogleAccessToken());
         existente.setGoogleRefreshToken(profissional.getGoogleRefreshToken());
         existente.setEmpresaId(profissional.getEmpresaId());

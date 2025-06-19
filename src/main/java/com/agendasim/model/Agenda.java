@@ -6,6 +6,8 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Data
 
 @Entity
@@ -43,7 +45,24 @@ public class Agenda {
     private LocalDateTime dataHora;
 
     @NotBlank(message = "O status da agenda é obrigatório")
-    @Pattern(regexp = "^(AGENDADO|CONFIRMADO|REALIZADO|CANCELADO)$",
-             message = "Status inválido. Use AGENDADO, CONFIRMADO, REALIZADO ou CANCELADO")
+    @Pattern(regexp = "^(AGENDADO|CONFIRMADO|REALIZADO|CANCELADO)$", message = "Status inválido. Use AGENDADO, CONFIRMADO, REALIZADO ou CANCELADO")
     private String status;
+
+    @Column(name = "created_at", updatable = false)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
 }

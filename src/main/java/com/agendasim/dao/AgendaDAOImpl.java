@@ -48,6 +48,7 @@ public class AgendaDAOImpl implements AgendaDAO {
         existente.setTelefoneCliente(agenda.getTelefoneCliente());
         existente.setDataHora(agenda.getDataHora());
         existente.setStatus(agenda.getStatus());
+        existente.setStatus(agenda.getStatus());
         existente.setServico(agenda.getServico());
         existente.setProfissional(agenda.getProfissional());
         existente.setEmpresa(agenda.getEmpresa());

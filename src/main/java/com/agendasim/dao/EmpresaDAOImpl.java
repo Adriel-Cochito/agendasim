@@ -47,6 +47,7 @@ public class EmpresaDAOImpl implements EmpresaDAO {
             existente.setNome(empresa.getNome());
             existente.setEmail(empresa.getEmail());
             existente.setTelefone(empresa.getTelefone());
+            existente.setAtivo(empresa.getAtivo());
             existente.setCnpj(empresa.getCnpj());
             return empresaRepository.save(existente);
         }
