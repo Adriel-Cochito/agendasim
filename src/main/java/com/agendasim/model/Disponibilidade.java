@@ -3,9 +3,12 @@ package com.agendasim.model;
 import com.agendasim.enums.TipoDisponibilidade;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.AssertTrue;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -20,11 +23,18 @@ public class Disponibilidade {
     @Enumerated(EnumType.STRING)
     private TipoDisponibilidade tipo;
 
-    @NotNull
+    // Para BLOQUEIO e LIBERADO
     private LocalDateTime dataHoraInicio;
-
-    @NotNull
     private LocalDateTime dataHoraFim;
+
+    // Para GRADE
+    @ElementCollection
+    @CollectionTable(name = "disponibilidade_dias_semana", joinColumns = @JoinColumn(name = "disponibilidade_id"))
+    @Column(name = "dia_semana")
+    private List<Integer> diasSemana; // 0=Dom, 1=Seg, ..., 6=Sáb
+
+    private LocalTime horaInicio; // apenas para GRADE
+    private LocalTime horaFim; // apenas para GRADE
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profissional_id")
@@ -37,4 +47,37 @@ public class Disponibilidade {
     private Empresa empresa;
 
     private String observacao;
+
+    // ============================
+    // Validações condicionais
+    // ============================
+
+    @AssertTrue(message = "Para GRADE, deve informar diasSemana, horaInicio e horaFim, e deixar dataHoraInicio/Fim nulos")
+    public boolean isGradeValida() {
+        if (tipo != TipoDisponibilidade.GRADE)
+            return true;
+
+        // Se diasSemana estiver null aqui, assume que ainda está sendo populado e não
+        // valida agora
+        if (diasSemana == null)
+            return true;
+
+        return !diasSemana.isEmpty()
+                && horaInicio != null
+                && horaFim != null
+                && dataHoraInicio == null
+                && dataHoraFim == null;
+    }
+
+    @AssertTrue(message = "Para BLOQUEIO ou LIBERADO, dataHoraInicio e dataHoraFim são obrigatórios, e grade deve estar nula")
+    public boolean isPontoValido() {
+        if (tipo == TipoDisponibilidade.BLOQUEIO || tipo == TipoDisponibilidade.LIBERADO) {
+            return dataHoraInicio != null
+                    && dataHoraFim != null
+                    && (diasSemana == null || diasSemana.isEmpty())
+                    && horaInicio == null
+                    && horaFim == null;
+        }
+        return true;
+    }
 }

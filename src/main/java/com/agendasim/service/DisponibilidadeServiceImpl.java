@@ -1,6 +1,7 @@
 package com.agendasim.service;
 
 import com.agendasim.dao.DisponibilidadeDAO;
+import com.agendasim.enums.TipoDisponibilidade;
 import com.agendasim.model.Disponibilidade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,21 @@ public class DisponibilidadeServiceImpl implements DisponibilidadeService {
     @Override
     @Transactional
     public Disponibilidade salvar(Disponibilidade disponibilidade) {
-        if ("BLOQUEIO".equals(disponibilidade.getTipo().name())) {
+        switch (disponibilidade.getTipo()) {
+            case GRADE:
+                disponibilidade.setDataHoraInicio(null);
+                disponibilidade.setDataHoraFim(null);
+                break;
+
+            case BLOQUEIO:
+            case LIBERADO:
+                disponibilidade.setDiasSemana(null);
+                disponibilidade.setHoraInicio(null);
+                disponibilidade.setHoraFim(null);
+                break;
+        }
+
+        if (disponibilidade.getTipo() == TipoDisponibilidade.BLOQUEIO) {
             return disponibilidadeDAO.salvar(disponibilidade);
         }
 
@@ -39,7 +54,8 @@ public class DisponibilidadeServiceImpl implements DisponibilidadeService {
     @Override
     public Disponibilidade buscarPorId(Long id) {
         Disponibilidade d = disponibilidadeDAO.buscarPorId(id);
-        if (d == null) throw new RuntimeException("Disponibilidade não encontrada");
+        if (d == null)
+            throw new RuntimeException("Disponibilidade não encontrada");
         return d;
     }
 
@@ -59,4 +75,3 @@ public class DisponibilidadeServiceImpl implements DisponibilidadeService {
         throw new UnsupportedOperationException("Não implementado ainda");
     }
 }
-
