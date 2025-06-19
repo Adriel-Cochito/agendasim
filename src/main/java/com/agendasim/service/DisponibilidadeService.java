@@ -9,7 +9,8 @@ public interface DisponibilidadeService {
     Disponibilidade atualizar(Long id, Disponibilidade disponibilidade);
     Disponibilidade buscarPorId(Long id);
     void deletar(Long id);
-    List<Disponibilidade> listarPorProfissional(Long profissionalId);
+    List<Disponibilidade> listarPorEmpresa(Long empresaId);
     List<Disponibilidade> listarPorEmpresaEProfissional(Long empresaId, Long profissionalId);
+
 }
 

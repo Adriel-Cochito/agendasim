@@ -49,6 +49,14 @@ public class DisponibilidadeDAOImpl implements DisponibilidadeDAO {
                 .getResultList();
     }
 
+        @Override
+    public List<Disponibilidade> listarPorEmpresa(Long empresaId) {
+        String jpql = "SELECT d FROM Disponibilidade d WHERE d.empresa.id = :empresaId";
+        return entityManager.createQuery(jpql, Disponibilidade.class)
+                .setParameter("empresaId", empresaId)
+                .getResultList();
+    }
+
     @Override
     public boolean existeConflito(Disponibilidade disponibilidade) {
         String jpql = "SELECT COUNT(d) FROM Disponibilidade d " +

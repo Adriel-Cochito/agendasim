@@ -38,7 +38,12 @@ public class DisponibilidadeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Disponibilidade>> listar(@RequestParam Long empresaId,
+    public ResponseEntity<List<Disponibilidade>> listar(@RequestParam Long empresaId) {
+        return ResponseEntity.ok(disponibilidadeService.listarPorEmpresa(empresaId));
+    }
+
+        @GetMapping("/profissional")
+    public ResponseEntity<List<Disponibilidade>> listarByProfissional(@RequestParam Long empresaId,
                                                          @RequestParam Long profissionalId) {
         return ResponseEntity.ok(disponibilidadeService.listarPorEmpresaEProfissional(empresaId, profissionalId));
     }

@@ -66,12 +66,14 @@ public class DisponibilidadeServiceImpl implements DisponibilidadeService {
     }
 
     @Override
+    public List<Disponibilidade> listarPorEmpresa(Long empresaId) {
+        return disponibilidadeDAO.listarPorEmpresa(empresaId);
+    }
+
+        @Override
     public List<Disponibilidade> listarPorEmpresaEProfissional(Long empresaId, Long profissionalId) {
         return disponibilidadeDAO.listarPorEmpresaEProfissional(empresaId, profissionalId);
     }
 
-    @Override
-    public List<Disponibilidade> listarPorProfissional(Long profissionalId) {
-        throw new UnsupportedOperationException("Não implementado ainda");
-    }
+
 }

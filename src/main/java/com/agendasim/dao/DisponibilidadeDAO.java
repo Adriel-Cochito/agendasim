@@ -9,6 +9,7 @@ public interface DisponibilidadeDAO {
     Disponibilidade atualizar(Disponibilidade disponibilidade);
     void deletar(Long id);
     Disponibilidade buscarPorId(Long id);
+    List<Disponibilidade> listarPorEmpresa(Long empresaId);
     List<Disponibilidade> listarPorEmpresaEProfissional(Long empresaId, Long profissionalId);
     boolean existeConflito(Disponibilidade disponibilidade);
 }
