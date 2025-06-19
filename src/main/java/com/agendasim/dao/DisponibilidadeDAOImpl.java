@@ -1,5 +1,6 @@
 package com.agendasim.dao;
 
+import com.agendasim.exception.RecursoNaoEncontradoException;
 import com.agendasim.model.Disponibilidade;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -33,7 +34,10 @@ public class DisponibilidadeDAOImpl implements DisponibilidadeDAO {
         Disponibilidade d = buscarPorId(id);
         if (d != null) {
             entityManager.remove(d);
+        } else {
+            throw new RecursoNaoEncontradoException("Disponibilidade com ID " + id + " não encontrado");
         }
+        
     }
 
     @Override
