@@ -7,6 +7,9 @@ INSERT INTO profissionais (nome, email, google_access_token, google_refresh_toke
 -- SERVIÇO
 INSERT INTO servicos (titulo, descricao, preco, duracao, empresa_id, ativo, created_at) VALUES ('Corte de Cabelo', 'Corte profissional com máquina e tesoura', 50.00, 30, 1, true, NOW());
 
+-- Associa Servico com Profissional
+INSERT INTO servico_profissional (servico_id, profissional_id) VALUES (1, 1);
+
 -- AGENDA
 INSERT INTO agendas (nome_cliente, telefone_cliente, empresa_id, profissional_id, servico_id, data_hora, status, created_at) VALUES ('Cliente Teste', '+55 31 98888-7777', 1, 1, 1, '2025-06-21 10:00:00', 'AGENDADO', NOW());
 

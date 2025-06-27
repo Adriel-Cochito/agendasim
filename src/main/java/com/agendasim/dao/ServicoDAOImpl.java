@@ -44,19 +44,23 @@ public class ServicoDAOImpl implements ServicoDAO {
 
     @Override
     public Servico atualizar(Long id, Servico servico) {
-    Servico existente = servicoRepository.findById(id)
-        .orElseThrow(() -> new RecursoNaoEncontradoException("Serviço com ID " + id + " não encontrado"));
-        if (existente != null) {
-            existente.setTitulo(servico.getTitulo());
-            existente.setDescricao(servico.getDescricao());
-            existente.setPreco(servico.getPreco());
-            existente.setAtivo(servico.getAtivo());
-            existente.setDuracao(servico.getDuracao());
-            existente.setEmpresaId(servico.getEmpresaId());
-            return servicoRepository.save(existente);
-        }
-        return null;
+        Servico existente = servicoRepository.findById(id)
+            .orElseThrow(() -> new RecursoNaoEncontradoException("Serviço com ID " + id + " não encontrado"));
+
+        // Atualiza campos básicos
+        existente.setTitulo(servico.getTitulo());
+        existente.setDescricao(servico.getDescricao());
+        existente.setPreco(servico.getPreco());
+        existente.setAtivo(servico.getAtivo());
+        existente.setDuracao(servico.getDuracao());
+        existente.setEmpresaId(servico.getEmpresaId());
+
+        // Atualiza os profissionais associados
+        existente.setProfissionais(servico.getProfissionais());
+
+        return servicoRepository.save(existente);
     }
+
 
     @Override
     public List<Servico> listarPorEmpresa(Long empresaId) {

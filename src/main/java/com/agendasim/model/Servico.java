@@ -10,6 +10,8 @@ import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
@@ -36,6 +38,15 @@ public class Servico {
 
     @NotNull(message = "O ID da empresa é obrigatório")
     private Long empresaId;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "servico_profissional",
+        joinColumns = @JoinColumn(name = "servico_id"),
+        inverseJoinColumns = @JoinColumn(name = "profissional_id")
+    )
+    private List<Profissional> profissionais = new ArrayList<>();
+
 
     @Column(nullable = false)
     private Boolean ativo = true;
