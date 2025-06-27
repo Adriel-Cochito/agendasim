@@ -2,6 +2,7 @@ package com.agendasim.service;
 
 import com.agendasim.model.Disponibilidade;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface DisponibilidadeService {
@@ -11,6 +12,7 @@ public interface DisponibilidadeService {
     void deletar(Long id);
     List<Disponibilidade> listarPorEmpresa(Long empresaId);
     List<Disponibilidade> listarPorEmpresaEProfissional(Long empresaId, Long profissionalId);
+    List<Disponibilidade> listarPorEmpresaProfissionalEData(Long empresaId, Long profissionalId, LocalDate data);
 
 }
 

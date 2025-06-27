@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -70,9 +71,14 @@ public class DisponibilidadeServiceImpl implements DisponibilidadeService {
         return disponibilidadeDAO.listarPorEmpresa(empresaId);
     }
 
-        @Override
+    @Override
     public List<Disponibilidade> listarPorEmpresaEProfissional(Long empresaId, Long profissionalId) {
         return disponibilidadeDAO.listarPorEmpresaEProfissional(empresaId, profissionalId);
+    }
+
+    @Override
+    public List<Disponibilidade> listarPorEmpresaProfissionalEData(Long empresaId, Long profissionalId, LocalDate data) {
+        return disponibilidadeDAO.listarPorEmpresaProfissionalEData(empresaId, profissionalId, data);
     }
 
 

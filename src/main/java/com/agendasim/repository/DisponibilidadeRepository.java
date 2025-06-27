@@ -11,5 +11,5 @@ public interface DisponibilidadeRepository extends JpaRepository<Disponibilidade
     List<Disponibilidade> findByEmpresaIdAndProfissionalId(Long empresaId, Long profissionalId);
     List<Disponibilidade> findByTipoAndEmpresaIdAndProfissionalId(TipoDisponibilidade tipo, Long empresaId, Long profissionalId);
     List<Disponibilidade> findByProfissionalIdAndDataHoraInicioLessThanEqualAndDataHoraFimGreaterThanEqual(
-        Long profissionalId, LocalDateTime fim, LocalDateTime inicio);
+    Long profissionalId, LocalDateTime fim, LocalDateTime inicio);
 }

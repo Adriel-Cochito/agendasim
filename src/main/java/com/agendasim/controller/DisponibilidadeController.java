@@ -4,9 +4,11 @@ import com.agendasim.model.Disponibilidade;
 import com.agendasim.service.DisponibilidadeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -42,10 +44,24 @@ public class DisponibilidadeController {
         return ResponseEntity.ok(disponibilidadeService.listarPorEmpresa(empresaId));
     }
 
-        @GetMapping("/profissional")
+    @GetMapping("/profissional")
     public ResponseEntity<List<Disponibilidade>> listarByProfissional(@RequestParam Long empresaId,
                                                          @RequestParam Long profissionalId) {
         return ResponseEntity.ok(disponibilidadeService.listarPorEmpresaEProfissional(empresaId, profissionalId));
     }
+
+    @GetMapping("/profissional/data")
+    public ResponseEntity<List<Disponibilidade>> listarByProfissionalAndData(
+            @RequestParam Long empresaId,
+            @RequestParam Long profissionalId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+        
+        List<Disponibilidade> lista = disponibilidadeService
+                .listarPorEmpresaProfissionalEData(empresaId, profissionalId, data);
+        
+        return ResponseEntity.ok(lista);
+    }
+
+
 }
 
