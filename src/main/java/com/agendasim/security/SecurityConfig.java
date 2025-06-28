@@ -2,6 +2,7 @@ package com.agendasim.security;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpMethod;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -50,24 +51,41 @@ public class SecurityConfig {
                         .authenticationEntryPoint((req, res, ex) -> {
                             res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
                         }))
+
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/agendamentos/**",  "/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**").permitAll()
+                        // Rotas públicas (sem autenticação)
+                        .requestMatchers("/auth/**", "/agendamentos/**", "/swagger-ui/**", "/v3/api-docs/**",
+                                "/h2-console/**")
+                        .permitAll()
 
-                        // ADMIN e OWNER têm acesso à gestão da empresa
-                        .requestMatchers("/empresas/**").hasAnyRole("ADMIN", "OWNER")
+                        // EMPRESAS - apenas OWNER
+                        .requestMatchers("/empresas/**").hasRole("OWNER")
 
-                        // ADMIN e OWNER podem gerenciar profissionais
-                        .requestMatchers("/profissionais/**").hasAnyRole("ADMIN", "OWNER")
+                        // PROFISSIONAIS
+                        .requestMatchers(HttpMethod.GET, "/profissionais/**").hasAnyRole("OWNER", "ADMIN", "USER")
+                        .requestMatchers(HttpMethod.POST, "/profissionais/**").hasAnyRole("OWNER")
+                        .requestMatchers(HttpMethod.PUT, "/profissionais/**").hasAnyRole("OWNER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/profissionais/**").hasAnyRole("OWNER")
 
-                        // OWNER pode gerenciar agendas
-                        .requestMatchers("/agendas/**").hasAnyRole("OWNER")
+                        // AGENDAS
+                        .requestMatchers(HttpMethod.GET, "/agendas/**").hasAnyRole("OWNER", "ADMIN", "USER")
+                        .requestMatchers(HttpMethod.POST, "/agendas/**").hasAnyRole("OWNER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/agendas/**").hasAnyRole("OWNER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/agendas/**").hasAnyRole("OWNER", "ADMIN")
 
-                        // OWNER pode configurar disponibilidade
-                        .requestMatchers("/disponibilidades/**").hasAnyRole("OWNER", "USER")
+                        // DISPONIBILIDADES
+                        .requestMatchers(HttpMethod.GET, "/disponibilidades/**").hasAnyRole("OWNER", "ADMIN", "USER")
+                        .requestMatchers(HttpMethod.POST, "/disponibilidades/**").hasAnyRole("OWNER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/disponibilidades/**").hasAnyRole("OWNER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/disponibilidades/**").hasAnyRole("OWNER", "ADMIN")
 
-                        // OWNER gerencia serviços
-                        .requestMatchers("/servicos/**").hasAnyRole("OWNER", "USER")
+                        // SERVIÇOS
+                        .requestMatchers(HttpMethod.GET, "/servicos/**").hasAnyRole("OWNER", "ADMIN", "USER")
+                        .requestMatchers(HttpMethod.POST, "/servicos/**").hasAnyRole("OWNER")
+                        .requestMatchers(HttpMethod.PUT, "/servicos/**").hasAnyRole("OWNER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/servicos/**").hasAnyRole("OWNER")
 
+                        // Qualquer outra requisição exige autenticação
                         .anyRequest().authenticated())
 
                 .authenticationProvider(authenticationProvider())
