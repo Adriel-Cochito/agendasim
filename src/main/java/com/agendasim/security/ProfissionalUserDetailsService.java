@@ -20,7 +20,8 @@ public class ProfissionalUserDetailsService implements UserDetailsService {
         return User.builder()
                 .username(profissional.getEmail())
                 .password(profissional.getSenha())
-                .roles("PROFISSIONAL")
+                .roles(profissional.getPerfil().name()) // ex: ADMIN
                 .build();
+
     }
 }

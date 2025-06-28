@@ -43,25 +43,35 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-            .csrf(AbstractHttpConfigurer::disable)
-            .headers(headers -> headers.frameOptions().disable()) // permite /h2-console em frame
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .exceptionHandling(exception -> exception
-                .authenticationEntryPoint((req, res, ex) -> {
-                    res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-                })
-            )
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                    "/auth/**",
-                    "/swagger-ui/**",
-                    "/v3/api-docs/**",
-                    "/h2-console/**"
-                ).permitAll()
-                .anyRequest().authenticated()
-            )
-            .authenticationProvider(authenticationProvider())
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-            .build();
+                .csrf(AbstractHttpConfigurer::disable)
+                .headers(headers -> headers.frameOptions().disable()) // permite /h2-console em frame
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((req, res, ex) -> {
+                            res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                        }))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/**", "/agendamentos/**",  "/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**").permitAll()
+
+                        // ADMIN e OWNER têm acesso à gestão da empresa
+                        .requestMatchers("/empresas/**").hasAnyRole("ADMIN", "OWNER")
+
+                        // ADMIN e OWNER podem gerenciar profissionais
+                        .requestMatchers("/profissionais/**").hasAnyRole("ADMIN", "OWNER")
+
+                        // OWNER pode gerenciar agendas
+                        .requestMatchers("/agendas/**").hasAnyRole("OWNER")
+
+                        // OWNER pode configurar disponibilidade
+                        .requestMatchers("/disponibilidades/**").hasAnyRole("OWNER", "USER")
+
+                        // OWNER gerencia serviços
+                        .requestMatchers("/servicos/**").hasAnyRole("OWNER", "USER")
+
+                        .anyRequest().authenticated())
+
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 }
