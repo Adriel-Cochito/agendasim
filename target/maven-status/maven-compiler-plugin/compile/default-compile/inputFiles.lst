@@ -6,6 +6,7 @@ C:\Projetos\agendasim\src\main\java\com\agendasim\model\Servico.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\security\dto\JwtResponse.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\repository\ServicoRepository.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\exception\ValidationExceptionHandler.java
+C:\Projetos\agendasim\src\main\java\com\agendasim\enums\Perfil.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\dao\EmpresaDAOImpl.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\service\ServicoService.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\mapper\AgendaMapper.java
