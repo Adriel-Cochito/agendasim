@@ -27,6 +27,11 @@ public class Profissional {
     @Email(message = "E-mail inválido")
     private String email;
 
+    @NotBlank(message = "A senha é obrigatória")
+    @Size(min = 3, max = 120, message = "A senha deve ter entre 6 e 120 caracteres")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String senha;
+
     @Size(max = 512, message = "O token do Google é muito grande")
     private String googleAccessToken;
 

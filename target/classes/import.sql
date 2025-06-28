@@ -2,7 +2,7 @@
 INSERT INTO empresas (nome, email, telefone, cnpj, ativo, created_at) VALUES ('Empresa Exemplo', 'empresa@exemplo.com', '+55 31 99999-8888', '12.345.678/0001-99', true, NOW());
 
 -- PROFISSIONAL
-INSERT INTO profissionais (nome, email, google_access_token, google_refresh_token, empresa_id, ativo, created_at) VALUES ('João Silva', 'joao@empresa.com', null, null, 1, true, NOW());
+INSERT INTO profissionais (nome, email, senha, google_access_token, google_refresh_token, empresa_id, ativo, created_at) VALUES ('João Silva', 'joao@empresa.com', '$2a$10$eJlE.0VdkiUH8AgN/8PqsOb8tNsYHIVVGPpxFOZAciGvAX5IgIBoq', null, null, 1, true, NOW());
 
 -- SERVIÇO
 INSERT INTO servicos (titulo, descricao, preco, duracao, empresa_id, ativo, created_at) VALUES ('Corte de Cabelo', 'Corte profissional com máquina e tesoura', 50.00, 30, 1, true, NOW());

@@ -3,6 +3,7 @@ package com.agendasim.service;
 import com.agendasim.dao.ProfissionalDAO;
 import com.agendasim.model.Profissional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,15 +14,21 @@ public class ProfissionalServiceImpl implements ProfissionalService {
     @Autowired
     private ProfissionalDAO profissionalDAO;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @Override
+    public Profissional salvar(Profissional profissional) {
+        profissional.setSenha(passwordEncoder.encode(profissional.getSenha()));
+        return profissionalDAO.salvar(profissional);
+    }
+
+
     @Override
     public List<Profissional> listarTodos() {
         return profissionalDAO.listarTodos();
     }
 
-    @Override
-    public Profissional salvar(Profissional profissional) {
-        return profissionalDAO.salvar(profissional);
-    }
 
     @Override
     public Profissional buscarPorId(Long id) {
