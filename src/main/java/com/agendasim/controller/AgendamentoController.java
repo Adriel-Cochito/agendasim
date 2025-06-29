@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.agendasim.dao.AgendaClienteDAO;
 import com.agendasim.model.Disponibilidade;
 import com.agendasim.model.Servico;
+import com.agendasim.service.AgendaService;
 import com.agendasim.service.DisponibilidadeService;
 import com.agendasim.service.ServicoService;
 
@@ -25,6 +27,9 @@ public class AgendamentoController {
 
     @Autowired
     private DisponibilidadeService disponibilidadeService;
+
+    @Autowired
+    private AgendaService agendaService;
     
     // LISTAR (sempre requer empresaId)
     @GetMapping("/servicos")
@@ -42,6 +47,15 @@ public class AgendamentoController {
                 .listarPorEmpresaProfissionalEData(empresaId, profissionalId, data);
         
         return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/agenda")
+    public ResponseEntity<List<AgendaClienteDAO>> listarParaCliente(
+            @RequestParam Long empresaId,
+            @RequestParam Long servicoId,
+            @RequestParam Long profissionalId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+        return ResponseEntity.ok(agendaService.listarParaClienteData(empresaId, servicoId, profissionalId, data));
     }
 
 }

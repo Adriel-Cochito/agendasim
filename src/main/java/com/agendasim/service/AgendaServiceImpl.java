@@ -9,6 +9,8 @@ import com.agendasim.model.Empresa;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -71,6 +73,13 @@ public class AgendaServiceImpl implements AgendaService {
     public List<AgendaClienteDAO> listarParaCliente(Long empresaId, Long servicoId, Long profissionalId) {
         return AgendaMapper.toClienteDAOList(
             agendaDAO.listarPorEmpresaEServicoEProfissional(empresaId, servicoId, profissionalId)
+        );
+    }
+
+    @Override
+    public List<AgendaClienteDAO> listarParaClienteData(Long empresaId, Long servicoId, Long profissionalId, LocalDate data) {
+        return AgendaMapper.toClienteDAOList(
+            agendaDAO.listarPorEmpresaEServicoEProfissionalData(empresaId, servicoId, profissionalId, data)
         );
     }
 

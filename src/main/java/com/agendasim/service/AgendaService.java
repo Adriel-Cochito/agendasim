@@ -4,6 +4,7 @@ import com.agendasim.dao.AgendaAdminDAO;
 import com.agendasim.dao.AgendaClienteDAO;
 import com.agendasim.model.Agenda;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface AgendaService {
@@ -17,4 +18,5 @@ public interface AgendaService {
 
     List<AgendaAdminDAO> listarParaAdmin(Long empresaId);
     List<AgendaClienteDAO> listarParaCliente(Long empresaId, Long servicoId, Long profissionalId);
+    List<AgendaClienteDAO> listarParaClienteData(Long empresaId, Long servicoId, Long profissionalId, LocalDate data);
 }

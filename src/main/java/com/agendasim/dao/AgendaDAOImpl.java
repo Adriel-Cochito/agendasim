@@ -11,6 +11,8 @@ import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -72,13 +74,34 @@ public class AgendaDAOImpl implements AgendaDAO {
         return agendaRepository.findByEmpresaId(empresaId);
     }
 
-        @Override
+    @Override
     public List<Agenda> listarPorEmpresaEServicoEProfissional(Long empresaId, Long servicoId, Long profissionalId) {
         String jpql = "SELECT a FROM Agenda a WHERE a.empresa.id = :empresaId AND a.servico.id = :servicoId AND a.profissional.id = :profissionalId";
         TypedQuery<Agenda> query = entityManager.createQuery(jpql, Agenda.class);
         query.setParameter("empresaId", empresaId);
         query.setParameter("servicoId", servicoId);
         query.setParameter("profissionalId", profissionalId);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Agenda> listarPorEmpresaEServicoEProfissionalData(Long empresaId, Long servicoId, Long profissionalId,
+            LocalDate data) {
+        LocalDateTime inicioDoDia = data.atStartOfDay();
+        LocalDateTime fimDoDia = data.atTime(23, 59, 59);
+
+        String jpql = "SELECT a FROM Agenda a WHERE a.empresa.id = :empresaId " +
+                "AND a.servico.id = :servicoId " +
+                "AND a.profissional.id = :profissionalId " +
+                "AND a.dataHora BETWEEN :inicio AND :fim";
+
+        TypedQuery<Agenda> query = entityManager.createQuery(jpql, Agenda.class);
+        query.setParameter("empresaId", empresaId);
+        query.setParameter("servicoId", servicoId);
+        query.setParameter("profissionalId", profissionalId);
+        query.setParameter("inicio", inicioDoDia);
+        query.setParameter("fim", fimDoDia);
 
         return query.getResultList();
     }

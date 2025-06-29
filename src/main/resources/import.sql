@@ -17,6 +17,8 @@ INSERT INTO servico_profissional (servico_id, profissional_id) VALUES (1, 3);
 
 -- AGENDA
 INSERT INTO agendas (nome_cliente, telefone_cliente, empresa_id, profissional_id, servico_id, data_hora, status, created_at) VALUES ('Cliente Teste', '+55 31 98888-7777', 1, 1, 1, '2025-06-21 10:00:00', 'AGENDADO', NOW());
+INSERT INTO agendas (nome_cliente, telefone_cliente, empresa_id, profissional_id, servico_id, data_hora, status, created_at) VALUES ('Cliente Teste', '+55 31 98888-7777', 1, 1, 1, '2025-06-23 09:00:00', 'AGENDADO', NOW());
+
 
 -- DISPONIBILIDADE - GRADE
 INSERT INTO disponibilidades (tipo, hora_inicio, hora_fim, profissional_id, empresa_id, observacao, created_at) VALUES ('GRADE', '09:00:00', '18:00:00', 1, 1, 'Disponível durante a semana', NOW());
