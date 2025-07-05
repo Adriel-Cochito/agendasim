@@ -1,6 +1,6 @@
 package com.agendasim.service;
 
-import com.agendasim.dao.ServicoDAO;
+import com.agendasim.dto.ServicoDTO;
 import com.agendasim.model.Servico;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ import java.util.List;
 public class ServicoServiceImpl implements ServicoService {
 
     @Autowired
-    private ServicoDAO servicoDAO;
+    private ServicoDTO servicoDAO;
 
     @Override
     public List<Servico> listarTodos() {

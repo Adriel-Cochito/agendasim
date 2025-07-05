@@ -1,6 +1,6 @@
 package com.agendasim.service;
 
-import com.agendasim.dao.ProfissionalDAO;
+import com.agendasim.dto.ProfissionalDTO;
 import com.agendasim.model.Profissional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,7 +12,7 @@ import java.util.List;
 public class ProfissionalServiceImpl implements ProfissionalService {
 
     @Autowired
-    private ProfissionalDAO profissionalDAO;
+    private ProfissionalDTO profissionalDAO;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;

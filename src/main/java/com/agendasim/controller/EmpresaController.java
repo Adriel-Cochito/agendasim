@@ -1,7 +1,10 @@
 package com.agendasim.controller;
 
+import com.agendasim.dto.CriarEmpresaComOwnerDTO;
+import com.agendasim.dto.EmpresaComOwnerResponseDTO;
 import com.agendasim.model.Empresa;
 import com.agendasim.service.EmpresaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +25,11 @@ public class EmpresaController {
     @PostMapping
     public Empresa criar(@RequestBody Empresa empresa) {
         return empresaService.criar(empresa);
+    }
+
+    @PostMapping("/com-owner")
+    public EmpresaComOwnerResponseDTO criarComOwner(@Valid @RequestBody CriarEmpresaComOwnerDTO dto) {
+        return empresaService.criarEmpresaComOwner(dto);
     }
 
     @GetMapping("/{id}")

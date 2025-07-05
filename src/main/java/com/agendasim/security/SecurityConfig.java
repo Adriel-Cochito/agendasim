@@ -55,10 +55,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Rotas públicas (sem autenticação)
                         .requestMatchers("/auth/**", "/agendamentos/**", "/swagger-ui/**", "/v3/api-docs/**",
-                                "/h2-console/**")
+                                "/h2-console/**", "/empresas/com-owner") // ← Adicionado endpoint público
                         .permitAll()
 
-                        // EMPRESAS - apenas OWNER
+                        // EMPRESAS - apenas OWNER (exceto criação com owner que é pública)
                         .requestMatchers("/empresas/**").hasRole("OWNER")
 
                         // PROFISSIONAIS

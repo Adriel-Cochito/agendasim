@@ -1,6 +1,6 @@
 package com.agendasim.controller;
 
-import com.agendasim.dao.LoginRequest;
+import com.agendasim.dto.LoginRequest;
 import com.agendasim.security.JwtTokenService;
 import com.agendasim.security.dto.JwtResponse;
 

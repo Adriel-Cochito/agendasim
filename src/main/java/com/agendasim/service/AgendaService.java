@@ -1,7 +1,7 @@
 package com.agendasim.service;
 
-import com.agendasim.dao.AgendaAdminDAO;
-import com.agendasim.dao.AgendaClienteDAO;
+import com.agendasim.dto.AgendaAdminDTO;
+import com.agendasim.dto.AgendaClienteDTO;
 import com.agendasim.model.Agenda;
 
 import java.time.LocalDate;
@@ -16,7 +16,7 @@ public interface AgendaService {
     List<Agenda> listarPorEmpresa(Long empresaId);
     List<Agenda> listarPorServico(Long servicoId, Long empresaId);
 
-    List<AgendaAdminDAO> listarParaAdmin(Long empresaId);
-    List<AgendaClienteDAO> listarParaCliente(Long empresaId, Long servicoId, Long profissionalId);
-    List<AgendaClienteDAO> listarParaClienteData(Long empresaId, Long servicoId, Long profissionalId, LocalDate data);
+    List<AgendaAdminDTO> listarParaAdmin(Long empresaId);
+    List<AgendaClienteDTO> listarParaCliente(Long empresaId, Long servicoId, Long profissionalId);
+    List<AgendaClienteDTO> listarParaClienteData(Long empresaId, Long servicoId, Long profissionalId, LocalDate data);
 }

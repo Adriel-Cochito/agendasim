@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.agendasim.dao.AgendaClienteDAO;
+import com.agendasim.dto.AgendaClienteDTO;
 import com.agendasim.model.Disponibilidade;
 import com.agendasim.model.Servico;
 import com.agendasim.service.AgendaService;
@@ -50,7 +50,7 @@ public class AgendamentoController {
     }
 
     @GetMapping("/agenda")
-    public ResponseEntity<List<AgendaClienteDAO>> listarParaCliente(
+    public ResponseEntity<List<AgendaClienteDTO>> listarParaCliente(
             @RequestParam Long empresaId,
             @RequestParam Long servicoId,
             @RequestParam Long profissionalId,

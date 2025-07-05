@@ -1,8 +1,8 @@
 package com.agendasim.service;
 
-import com.agendasim.dao.AgendaAdminDAO;
-import com.agendasim.dao.AgendaClienteDAO;
-import com.agendasim.dao.AgendaDAO;
+import com.agendasim.dto.AgendaAdminDTO;
+import com.agendasim.dto.AgendaClienteDTO;
+import com.agendasim.dto.AgendaDTO;
 import com.agendasim.mapper.AgendaMapper;
 import com.agendasim.model.Agenda;
 import com.agendasim.model.Empresa;
@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 public class AgendaServiceImpl implements AgendaService {
     @Autowired
-    private AgendaDAO agendaDAO;
+    private AgendaDTO agendaDAO;
 
     @Override
     public List<Agenda> listarTodos() {
@@ -65,19 +65,19 @@ public class AgendaServiceImpl implements AgendaService {
     }
 
     @Override
-    public List<AgendaAdminDAO> listarParaAdmin(Long empresaId) {
+    public List<AgendaAdminDTO> listarParaAdmin(Long empresaId) {
         return AgendaMapper.toAdminDAOList(agendaDAO.listarPorEmpresa(empresaId));
     }
 
     @Override
-    public List<AgendaClienteDAO> listarParaCliente(Long empresaId, Long servicoId, Long profissionalId) {
+    public List<AgendaClienteDTO> listarParaCliente(Long empresaId, Long servicoId, Long profissionalId) {
         return AgendaMapper.toClienteDAOList(
             agendaDAO.listarPorEmpresaEServicoEProfissional(empresaId, servicoId, profissionalId)
         );
     }
 
     @Override
-    public List<AgendaClienteDAO> listarParaClienteData(Long empresaId, Long servicoId, Long profissionalId, LocalDate data) {
+    public List<AgendaClienteDTO> listarParaClienteData(Long empresaId, Long servicoId, Long profissionalId, LocalDate data) {
         return AgendaMapper.toClienteDAOList(
             agendaDAO.listarPorEmpresaEServicoEProfissionalData(empresaId, servicoId, profissionalId, data)
         );

@@ -1,6 +1,6 @@
 package com.agendasim.service;
 
-import com.agendasim.dao.DisponibilidadeDAO;
+import com.agendasim.dto.DisponibilidadeDTO;
 import com.agendasim.enums.TipoDisponibilidade;
 import com.agendasim.model.Disponibilidade;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import java.util.List;
 public class DisponibilidadeServiceImpl implements DisponibilidadeService {
 
     @Autowired
-    private DisponibilidadeDAO disponibilidadeDAO;
+    private DisponibilidadeDTO disponibilidadeDAO;
 
     @Override
     @Transactional

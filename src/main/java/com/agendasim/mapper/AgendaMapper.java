@@ -1,6 +1,6 @@
 package com.agendasim.mapper;
 
-import com.agendasim.dao.*;
+import com.agendasim.dto.*;
 import com.agendasim.model.Agenda;
 
 import java.util.List;
@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 
 public class AgendaMapper {
 
-    public static AgendaAdminDAO toAdminDAO(Agenda agenda) {
-        return new AgendaAdminDAO(
+    public static AgendaAdminDTO toAdminDAO(Agenda agenda) {
+        return new AgendaAdminDTO(
             agenda.getId(),
             agenda.getNomeCliente(),
             agenda.getTelefoneCliente(),
@@ -22,18 +22,18 @@ public class AgendaMapper {
         );
     }
 
-    public static AgendaClienteDAO toClienteDAO(Agenda agenda) {
-        return new AgendaClienteDAO(
+    public static AgendaClienteDTO toClienteDAO(Agenda agenda) {
+        return new AgendaClienteDTO(
             agenda.getDataHora(),
             agenda.getServico().getDuracao()
         );
     }
 
-    public static List<AgendaAdminDAO> toAdminDAOList(List<Agenda> agendas) {
+    public static List<AgendaAdminDTO> toAdminDAOList(List<Agenda> agendas) {
         return agendas.stream().map(AgendaMapper::toAdminDAO).collect(Collectors.toList());
     }
 
-    public static List<AgendaClienteDAO> toClienteDAOList(List<Agenda> agendas) {
+    public static List<AgendaClienteDTO> toClienteDAOList(List<Agenda> agendas) {
         return agendas.stream().map(AgendaMapper::toClienteDAO).collect(Collectors.toList());
     }
 }
