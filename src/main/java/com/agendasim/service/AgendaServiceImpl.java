@@ -16,11 +16,11 @@ import java.util.List;
 @Service
 public class AgendaServiceImpl implements AgendaService {
     @Autowired
-    private AgendaDTO agendaDAO;
+    private AgendaDTO agendaDTO;
 
     @Override
     public List<Agenda> listarTodos() {
-        return agendaDAO.listarTodos();
+        return agendaDTO.listarTodos();
     }
 
     @Override
@@ -29,18 +29,18 @@ public class AgendaServiceImpl implements AgendaService {
         empresa.setId(empresaId);
         agenda.setEmpresa(empresa);
 
-        return agendaDAO.salvar(agenda);
+        return agendaDTO.salvar(agenda);
     }
 
 
     @Override
     public Agenda buscarPorId(Long id) {
-        return agendaDAO.buscarPorId(id);
+        return agendaDTO.buscarPorId(id);
     }
 
     @Override
     public void excluir(Long id) {
-        agendaDAO.excluir(id);
+        agendaDTO.excluir(id);
     }
 
     @Override
@@ -50,36 +50,36 @@ public class AgendaServiceImpl implements AgendaService {
         empresa.setId(empresaId);
         agenda.setEmpresa(empresa);
 
-        return agendaDAO.atualizar(id, agenda);
+        return agendaDTO.atualizar(id, agenda);
     }
 
 
     @Override
     public List<Agenda> listarPorEmpresa(Long empresaId) {
-        return agendaDAO.listarPorEmpresa(empresaId);
+        return agendaDTO.listarPorEmpresa(empresaId);
     }
 
     @Override
     public List<Agenda> listarPorServico(Long servicoId, Long empresaId) {
-        return agendaDAO.listarPorServico(servicoId, empresaId);
+        return agendaDTO.listarPorServico(servicoId, empresaId);
     }
 
     @Override
     public List<AgendaAdminDTO> listarParaAdmin(Long empresaId) {
-        return AgendaMapper.toAdminDAOList(agendaDAO.listarPorEmpresa(empresaId));
+        return AgendaMapper.toAdminDAOList(agendaDTO.listarPorEmpresa(empresaId));
     }
 
     @Override
     public List<AgendaClienteDTO> listarParaCliente(Long empresaId, Long servicoId, Long profissionalId) {
         return AgendaMapper.toClienteDAOList(
-            agendaDAO.listarPorEmpresaEServicoEProfissional(empresaId, servicoId, profissionalId)
+            agendaDTO.listarPorEmpresaEServicoEProfissional(empresaId, servicoId, profissionalId)
         );
     }
 
     @Override
     public List<AgendaClienteDTO> listarParaClienteData(Long empresaId, Long servicoId, Long profissionalId, LocalDate data) {
         return AgendaMapper.toClienteDAOList(
-            agendaDAO.listarPorEmpresaEServicoEProfissionalData(empresaId, servicoId, profissionalId, data)
+            agendaDTO.listarPorEmpresaEServicoEProfissionalData(empresaId, servicoId, profissionalId, data)
         );
     }
 

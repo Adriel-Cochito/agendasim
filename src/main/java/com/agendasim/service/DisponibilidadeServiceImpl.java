@@ -14,7 +14,7 @@ import java.util.List;
 public class DisponibilidadeServiceImpl implements DisponibilidadeService {
 
     @Autowired
-    private DisponibilidadeDTO disponibilidadeDAO;
+    private DisponibilidadeDTO disponibilidadeDTO;
 
     @Override
     @Transactional
@@ -34,14 +34,14 @@ public class DisponibilidadeServiceImpl implements DisponibilidadeService {
         }
 
         if (disponibilidade.getTipo() == TipoDisponibilidade.BLOQUEIO) {
-            return disponibilidadeDAO.salvar(disponibilidade);
+            return disponibilidadeDTO.salvar(disponibilidade);
         }
 
-        if (disponibilidadeDAO.existeConflito(disponibilidade)) {
+        if (disponibilidadeDTO.existeConflito(disponibilidade)) {
             throw new RuntimeException("Conflito de horário com um bloqueio existente.");
         }
 
-        return disponibilidadeDAO.salvar(disponibilidade);
+        return disponibilidadeDTO.salvar(disponibilidade);
     }
 
     @Override
@@ -49,12 +49,12 @@ public class DisponibilidadeServiceImpl implements DisponibilidadeService {
     public Disponibilidade atualizar(Long id, Disponibilidade disponibilidade) {
         Disponibilidade atual = buscarPorId(id);
         disponibilidade.setId(atual.getId()); // Garante atualização
-        return disponibilidadeDAO.atualizar(disponibilidade);
+        return disponibilidadeDTO.atualizar(disponibilidade);
     }
 
     @Override
     public Disponibilidade buscarPorId(Long id) {
-        Disponibilidade d = disponibilidadeDAO.buscarPorId(id);
+        Disponibilidade d = disponibilidadeDTO.buscarPorId(id);
         if (d == null)
             throw new RuntimeException("Disponibilidade não encontrada");
         return d;
@@ -63,22 +63,22 @@ public class DisponibilidadeServiceImpl implements DisponibilidadeService {
     @Override
     @Transactional
     public void deletar(Long id) {
-        disponibilidadeDAO.deletar(id);
+        disponibilidadeDTO.deletar(id);
     }
 
     @Override
     public List<Disponibilidade> listarPorEmpresa(Long empresaId) {
-        return disponibilidadeDAO.listarPorEmpresa(empresaId);
+        return disponibilidadeDTO.listarPorEmpresa(empresaId);
     }
 
     @Override
     public List<Disponibilidade> listarPorEmpresaEProfissional(Long empresaId, Long profissionalId) {
-        return disponibilidadeDAO.listarPorEmpresaEProfissional(empresaId, profissionalId);
+        return disponibilidadeDTO.listarPorEmpresaEProfissional(empresaId, profissionalId);
     }
 
     @Override
     public List<Disponibilidade> listarPorEmpresaProfissionalEData(Long empresaId, Long profissionalId, LocalDate data) {
-        return disponibilidadeDAO.listarPorEmpresaProfissionalEData(empresaId, profissionalId, data);
+        return disponibilidadeDTO.listarPorEmpresaProfissionalEData(empresaId, profissionalId, data);
     }
 
 

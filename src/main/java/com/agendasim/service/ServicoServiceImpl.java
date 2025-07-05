@@ -11,36 +11,36 @@ import java.util.List;
 public class ServicoServiceImpl implements ServicoService {
 
     @Autowired
-    private ServicoDTO servicoDAO;
+    private ServicoDTO servicoDTO;
 
     @Override
     public List<Servico> listarTodos() {
-        return servicoDAO.listarTodos();
+        return servicoDTO.listarTodos();
     }
 
     @Override
     public Servico criar(Servico servico) {
-        return servicoDAO.salvar(servico);
+        return servicoDTO.salvar(servico);
     }
 
     @Override
     public Servico buscarPorId(Long id, Long empresaId) {
-        return servicoDAO.buscarPorId(id, empresaId);
+        return servicoDTO.buscarPorId(id, empresaId);
     }
 
 
     @Override
     public void excluir(Long id) {
-        servicoDAO.excluir(id);
+        servicoDTO.excluir(id);
     }
 
     @Override
     public Servico atualizar(Long id, Servico servico) {
-        return servicoDAO.atualizar(id, servico);
+        return servicoDTO.atualizar(id, servico);
     }
 
     @Override
     public List<Servico> listarPorEmpresa(Long empresaId) {
-        return servicoDAO.listarPorEmpresa(empresaId);
+        return servicoDTO.listarPorEmpresa(empresaId);
     }
 }
