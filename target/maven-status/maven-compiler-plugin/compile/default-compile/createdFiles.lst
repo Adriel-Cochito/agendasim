@@ -20,10 +20,12 @@ com\agendasim\dto\DisponibilidadeDTO.class
 com\agendasim\dto\ProfissionalDTOImpl.class
 com\agendasim\model\Disponibilidade.class
 com\agendasim\model\Servico.class
+com\agendasim\service\DisponibilidadeServiceImpl.class
 com\agendasim\exception\ValidationExceptionHandler$ValidationError.class
 com\agendasim\repository\ServicoRepository.class
 com\agendasim\dto\ProfissionalDTO.class
 com\agendasim\mapper\AgendaMapper.class
+com\agendasim\service\ProfissionalServiceImpl.class
 com\agendasim\dto\EmpresaComOwnerResponseDTO.class
 com\agendasim\dto\AgendaClienteDTO.class
 com\agendasim\repository\AgendaRepository.class
@@ -34,6 +36,7 @@ com\agendasim\model\Empresa.class
 com\agendasim\security\JwtTokenService.class
 com\agendasim\SwaggerConfig.class
 com\agendasim\controller\DisponibilidadeController.class
+com\agendasim\service\ServicoServiceImpl.class
 com\agendasim\model\Profissional.class
 com\agendasim\service\ServicoService.class
 com\agendasim\dto\AgendaDTOImpl.class
@@ -50,5 +53,6 @@ com\agendasim\controller\ProfissionalController.class
 com\agendasim\dto\CriarEmpresaComOwnerDTO.class
 com\agendasim\security\dto\JwtResponse.class
 com\agendasim\dto\ServicoDTO.class
+com\agendasim\service\AgendaServiceImpl.class
 com\agendasim\model\Agenda.class
 com\agendasim\security\SecurityConfig.class
