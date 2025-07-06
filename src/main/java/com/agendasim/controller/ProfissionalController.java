@@ -1,5 +1,6 @@
 package com.agendasim.controller;
 
+import com.agendasim.dto.ProfissionalPatchDTO;
 import com.agendasim.model.Profissional;
 import com.agendasim.service.ProfissionalService;
 import jakarta.validation.Valid;
@@ -39,4 +40,10 @@ public class ProfissionalController {
     public void excluir(@PathVariable Long id) {
         profissionalService.excluir(id);
     }
+
+    @PatchMapping("/{id}")
+    public Profissional atualizarParcialmente(@PathVariable Long id, @RequestBody ProfissionalPatchDTO patchDTO) {
+        return profissionalService.atualizarParcial(id, patchDTO);
+    }
+
 }

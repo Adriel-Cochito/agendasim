@@ -8,6 +8,7 @@ C:\Projetos\agendasim\src\main\java\com\agendasim\dto\ServicoDTO.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\dto\AgendaAdminDTO.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\security\dto\JwtResponse.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\dto\EmpresaComOwnerResponseDTO.java
+C:\Projetos\agendasim\src\main\java\com\agendasim\dto\ProfissionalPatchDTO.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\repository\ServicoRepository.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\exception\ValidationExceptionHandler.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\enums\Perfil.java

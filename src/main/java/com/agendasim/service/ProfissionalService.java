@@ -1,5 +1,6 @@
 package com.agendasim.service;
 
+import com.agendasim.dto.ProfissionalPatchDTO;
 import com.agendasim.model.Profissional;
 
 import java.util.List;
@@ -11,4 +12,6 @@ public interface ProfissionalService {
     void excluir(Long id);
     Profissional atualizar(Long id, Profissional profissional);
     List<Profissional> listarPorEmpresa(Long empresaId);
+    Profissional atualizarParcial(Long id, ProfissionalPatchDTO patchDTO);
+
 }

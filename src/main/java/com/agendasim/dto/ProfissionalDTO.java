@@ -11,4 +11,6 @@ public interface ProfissionalDTO {
     void excluir(Long id);
     Profissional atualizar(Long id, Profissional profissional);
     List<Profissional> listarPorEmpresa(Long empresaId);
+    Profissional atualizarParcial(Long id, ProfissionalPatchDTO patchDTO);
+
 }

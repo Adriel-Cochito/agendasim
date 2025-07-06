@@ -62,6 +62,7 @@ public class SecurityConfig {
                         .requestMatchers("/empresas/**").hasRole("OWNER")
 
                         // PROFISSIONAIS
+                        .requestMatchers(HttpMethod.PATCH, "/profissionais/**").hasAnyRole("OWNER", "ADMIN", "USER")
                         .requestMatchers(HttpMethod.GET, "/profissionais/**").hasAnyRole("OWNER", "ADMIN", "USER")
                         .requestMatchers(HttpMethod.POST, "/profissionais/**").hasAnyRole("OWNER")
                         .requestMatchers(HttpMethod.PUT, "/profissionais/**").hasAnyRole("OWNER", "ADMIN")
@@ -81,9 +82,9 @@ public class SecurityConfig {
 
                         // SERVIÇOS
                         .requestMatchers(HttpMethod.GET, "/servicos/**").hasAnyRole("OWNER", "ADMIN", "USER")
-                        .requestMatchers(HttpMethod.POST, "/servicos/**").hasAnyRole("OWNER")
+                        .requestMatchers(HttpMethod.POST, "/servicos/**").hasAnyRole("OWNER", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/servicos/**").hasAnyRole("OWNER", "ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/servicos/**").hasAnyRole("OWNER")
+                        .requestMatchers(HttpMethod.DELETE, "/servicos/**").hasAnyRole("OWNER", "ADMIN")
 
                         // Qualquer outra requisição exige autenticação
                         .anyRequest().authenticated())

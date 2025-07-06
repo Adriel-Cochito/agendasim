@@ -56,4 +56,37 @@ public class ProfissionalDTOImpl implements ProfissionalDTO {
     public List<Profissional> listarPorEmpresa(Long empresaId) {
         return profissionalRepository.findByEmpresaId(empresaId);
     }
+
+    @Override
+    public Profissional atualizarParcial(Long id, ProfissionalPatchDTO patchDTO) {
+        Profissional existente = buscarPorId(id);
+
+        if (patchDTO.getNome() != null) {
+            existente.setNome(patchDTO.getNome());
+        }
+        if (patchDTO.getEmail() != null) {
+            existente.setEmail(patchDTO.getEmail());
+        }
+        if (patchDTO.getSenha() != null) {
+            existente.setSenha(patchDTO.getSenha());
+        }
+        if (patchDTO.getPerfil() != null) {
+            existente.setPerfil(patchDTO.getPerfil());
+        }
+        if (patchDTO.getGoogleAccessToken() != null) {
+            existente.setGoogleAccessToken(patchDTO.getGoogleAccessToken());
+        }
+        if (patchDTO.getGoogleRefreshToken() != null) {
+            existente.setGoogleRefreshToken(patchDTO.getGoogleRefreshToken());
+        }
+        if (patchDTO.getAtivo() != null) {
+            existente.setAtivo(patchDTO.getAtivo());
+        }
+        if (patchDTO.getEmpresaId() != null) {
+            existente.setEmpresaId(patchDTO.getEmpresaId());
+        }
+
+        return profissionalRepository.save(existente);
+    }
+
 }

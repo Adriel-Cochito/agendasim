@@ -1,6 +1,7 @@
 package com.agendasim.service;
 
 import com.agendasim.dto.ProfissionalDTO;
+import com.agendasim.dto.ProfissionalPatchDTO;
 import com.agendasim.model.Profissional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,12 +24,10 @@ public class ProfissionalServiceImpl implements ProfissionalService {
         return profissionalDTO.salvar(profissional);
     }
 
-
     @Override
     public List<Profissional> listarTodos() {
         return profissionalDTO.listarTodos();
     }
-
 
     @Override
     public Profissional buscarPorId(Long id) {
@@ -49,4 +48,14 @@ public class ProfissionalServiceImpl implements ProfissionalService {
     public List<Profissional> listarPorEmpresa(Long empresaId) {
         return profissionalDTO.listarPorEmpresa(empresaId);
     }
+
+    @Override
+    public Profissional atualizarParcial(Long id, ProfissionalPatchDTO patchDTO) {
+        // Se senha for enviada, criptografar
+        if (patchDTO.getSenha() != null) {
+            patchDTO.setSenha(passwordEncoder.encode(patchDTO.getSenha()));
+        }
+        return profissionalDTO.atualizarParcial(id, patchDTO);
+    }
+
 }
