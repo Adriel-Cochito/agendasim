@@ -1,9 +1,11 @@
 package com.agendasim.dto;
 
+import com.agendasim.exception.IntegridadeReferencialException;
 import com.agendasim.exception.RecursoNaoEncontradoException;
 import com.agendasim.model.Profissional;
 import com.agendasim.repository.ProfissionalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -35,7 +37,15 @@ public class ProfissionalDTOImpl implements ProfissionalDTO {
         if (!profissionalRepository.existsById(id)) {
             throw new RecursoNaoEncontradoException("Profissional não encontrado com ID: " + id);
         }
-        profissionalRepository.deleteById(id);
+        
+        try {
+            profissionalRepository.deleteById(id);
+        } catch (DataIntegrityViolationException ex) {
+            throw new IntegridadeReferencialException(
+                "Não é possível excluir este profissional pois ele está associado a serviços ou possui agendamentos/disponibilidades vinculados", 
+                ex
+            );
+        }
     }
 
     @Override

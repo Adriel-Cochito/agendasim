@@ -1,9 +1,11 @@
 package com.agendasim.dto;
 
+import com.agendasim.exception.IntegridadeReferencialException;
 import com.agendasim.exception.RecursoNaoEncontradoException;
 import com.agendasim.model.Servico;
 import com.agendasim.repository.ServicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 
 
@@ -38,7 +40,15 @@ public class ServicoDTOImpl implements ServicoDTO {
         if (!servicoRepository.existsById(id)) {
             throw new RecursoNaoEncontradoException("Serviço com ID " + id + " não encontrado");
         }
-        servicoRepository.deleteById(id);
+        
+        try {
+            servicoRepository.deleteById(id);
+        } catch (DataIntegrityViolationException ex) {
+            throw new IntegridadeReferencialException(
+                "Não é possível excluir este serviço pois ele possui agendamentos associados", 
+                ex
+            );
+        }
     }
 
 

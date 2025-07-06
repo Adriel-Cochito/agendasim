@@ -1,9 +1,11 @@
 package com.agendasim.dto;
 
+import com.agendasim.exception.IntegridadeReferencialException;
 import com.agendasim.exception.RecursoNaoEncontradoException;
 import com.agendasim.model.Empresa;
 import com.agendasim.repository.EmpresaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -32,10 +34,18 @@ public class EmpresaDTOImpl implements EmpresaDTO {
 
     @Override
     public void excluir(Long id) {
-    if (!empresaRepository.existsById(id)) {
+        if (!empresaRepository.existsById(id)) {
             throw new RecursoNaoEncontradoException("Empresa com ID " + id + " não encontrado");
         }
-        empresaRepository.deleteById(id);
+        
+        try {
+            empresaRepository.deleteById(id);
+        } catch (DataIntegrityViolationException ex) {
+            throw new IntegridadeReferencialException(
+                "Não é possível excluir esta empresa pois ela possui profissionais, serviços ou agendamentos associados", 
+                ex
+            );
+        }
     }
 
     @Override

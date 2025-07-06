@@ -23,6 +23,7 @@ C:\Projetos\agendasim\src\main\java\com\agendasim\SwaggerConfig.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\dto\LoginRequest.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\service\AgendaService.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\enums\TipoDisponibilidade.java
+C:\Projetos\agendasim\src\main\java\com\agendasim\exception\IntegridadeReferencialException.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\service\EmpresaServiceImpl.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\controller\AuthController.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\dto\DisponibilidadeDTOImpl.java
