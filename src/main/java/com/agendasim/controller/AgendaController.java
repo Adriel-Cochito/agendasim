@@ -3,12 +3,15 @@ package com.agendasim.controller;
 import com.agendasim.dto.AgendaAdminDTO;
 import com.agendasim.dto.AgendaClienteDTO;
 import com.agendasim.model.Agenda;
+import com.agendasim.model.Disponibilidade;
 import com.agendasim.service.AgendaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -56,6 +59,18 @@ public class AgendaController {
     @GetMapping("/admin")
     public ResponseEntity<List<AgendaAdminDTO>> listarParaAdmin(@RequestParam Long empresaId) {
         return ResponseEntity.ok(agendaService.listarParaAdmin(empresaId));
+    }
+
+        @GetMapping("/admin/data")
+    public ResponseEntity<List<AgendaAdminDTO>> listarParaAdminEData(
+            @RequestParam Long empresaId,
+            @RequestParam Long profissionalId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+        
+        List<AgendaAdminDTO> lista = agendaService
+                .listarPorEmpresaProfissionalEData(empresaId, profissionalId, data);
+        
+        return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/cliente")

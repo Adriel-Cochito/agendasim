@@ -5,6 +5,7 @@ import com.agendasim.dto.AgendaClienteDTO;
 import com.agendasim.dto.AgendaDTO;
 import com.agendasim.mapper.AgendaMapper;
 import com.agendasim.model.Agenda;
+import com.agendasim.model.Disponibilidade;
 import com.agendasim.model.Empresa;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,5 +83,11 @@ public class AgendaServiceImpl implements AgendaService {
             agendaDTO.listarPorEmpresaEServicoEProfissionalData(empresaId, servicoId, profissionalId, data)
         );
     }
+
+    @Override
+    public List<AgendaAdminDTO> listarPorEmpresaProfissionalEData(Long empresaId, Long profissionalId, LocalDate data) {
+        return AgendaMapper.toAdminDAOList(agendaDTO.listarPorEmpresaProfissionalEData(empresaId, profissionalId, data));
+    }
+
 
 }

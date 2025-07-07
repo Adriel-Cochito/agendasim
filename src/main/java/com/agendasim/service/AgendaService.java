@@ -19,4 +19,6 @@ public interface AgendaService {
     List<AgendaAdminDTO> listarParaAdmin(Long empresaId);
     List<AgendaClienteDTO> listarParaCliente(Long empresaId, Long servicoId, Long profissionalId);
     List<AgendaClienteDTO> listarParaClienteData(Long empresaId, Long servicoId, Long profissionalId, LocalDate data);
+    List<AgendaAdminDTO> listarPorEmpresaProfissionalEData(Long empresaId, Long profissionalId, LocalDate data);
+    
 }
