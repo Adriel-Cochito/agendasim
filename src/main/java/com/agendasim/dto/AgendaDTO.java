@@ -1,7 +1,6 @@
 package com.agendasim.dto;
 
 import com.agendasim.model.Agenda;
-import com.agendasim.model.Disponibilidade;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,6 +16,4 @@ public interface AgendaDTO {
     List<Agenda> listarPorEmpresaEServicoEProfissional(Long empresaId, Long servicoId, Long profissionalId);
     List<Agenda> listarPorEmpresaEServicoEProfissionalData(Long empresaId, Long servicoId, Long profissionalId, LocalDate data);
     List<Agenda> listarPorEmpresaProfissionalEData(Long empresaId, Long profissionalId, LocalDate data);
-
-
 }

@@ -11,8 +11,9 @@ import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 @Repository
@@ -49,7 +50,6 @@ public class AgendaDTOImpl implements AgendaDTO {
         existente.setNomeCliente(agenda.getNomeCliente());
         existente.setTelefoneCliente(agenda.getTelefoneCliente());
         existente.setDataHora(agenda.getDataHora());
-        existente.setStatus(agenda.getStatus());
         existente.setStatus(agenda.getStatus());
         existente.setServico(agenda.getServico());
         existente.setProfissional(agenda.getProfissional());
@@ -88,8 +88,9 @@ public class AgendaDTOImpl implements AgendaDTO {
     @Override
     public List<Agenda> listarPorEmpresaEServicoEProfissionalData(Long empresaId, Long servicoId, Long profissionalId,
             LocalDate data) {
-        LocalDateTime inicioDoDia = data.atStartOfDay();
-        LocalDateTime fimDoDia = data.atTime(23, 59, 59);
+        // Converte LocalDate para Instant considerando UTC
+        Instant inicioDoDia = data.atStartOfDay().toInstant(ZoneOffset.UTC);
+        Instant fimDoDia = data.atTime(23, 59, 59).toInstant(ZoneOffset.UTC);
 
         String jpql = "SELECT a FROM Agenda a WHERE a.empresa.id = :empresaId " +
                 "AND a.servico.id = :servicoId " +
@@ -109,8 +110,9 @@ public class AgendaDTOImpl implements AgendaDTO {
     @Override
     public List<Agenda> listarPorEmpresaProfissionalEData(Long empresaId, Long profissionalId,
             LocalDate data) {
-        LocalDateTime inicioDoDia = data.atStartOfDay();
-        LocalDateTime fimDoDia = data.atTime(23, 59, 59);
+        // Converte LocalDate para Instant considerando UTC
+        Instant inicioDoDia = data.atStartOfDay().toInstant(ZoneOffset.UTC);
+        Instant fimDoDia = data.atTime(23, 59, 59).toInstant(ZoneOffset.UTC);
 
         String jpql = "SELECT a FROM Agenda a WHERE a.empresa.id = :empresaId " +
                 "AND a.profissional.id = :profissionalId " +
@@ -124,7 +126,4 @@ public class AgendaDTOImpl implements AgendaDTO {
 
         return query.getResultList();
     }
-
-
-
 }

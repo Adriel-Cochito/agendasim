@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -41,8 +42,9 @@ public class Agenda {
     @JoinColumn(name = "servico_id")
     private Servico servico;
 
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     @NotNull(message = "A data e hora da agenda são obrigatórias")
-    private LocalDateTime dataHora;
+    private Instant dataHora;
 
     @NotBlank(message = "O status da agenda é obrigatório")
     @Pattern(regexp = "^(AGENDADO|CONFIRMADO|REALIZADO|CANCELADO)$", message = "Status inválido. Use AGENDADO, CONFIRMADO, REALIZADO ou CANCELADO")
@@ -50,19 +52,19 @@ public class Agenda {
 
     @Column(name = "created_at", updatable = false)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private Instant updatedAt;
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = Instant.now(); // Se createdAt também for Instant
     }
 
     @PreUpdate
     protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
+        this.updatedAt = Instant.now(); // Se updatedAt também for Instant
     }
 
 }

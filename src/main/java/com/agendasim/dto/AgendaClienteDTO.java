@@ -4,12 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class AgendaClienteDTO {
-    private LocalDateTime dataHora;
+    private Instant dataHora;
     private Integer duracao;
 }

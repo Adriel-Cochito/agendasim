@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Data
@@ -13,7 +14,7 @@ public class AgendaAdminDTO {
     private Long id;
     private String nomeCliente;
     private String telefoneCliente;
-    private LocalDateTime dataHora;
+    private Instant dataHora;
     private String status;
     private Long profissionalId;
     private String profissionalNome;

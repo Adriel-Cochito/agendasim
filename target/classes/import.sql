@@ -22,6 +22,7 @@ INSERT INTO agendas (nome_cliente, telefone_cliente, empresa_id, profissional_id
 
 -- DISPONIBILIDADE - GRADE
 INSERT INTO disponibilidades (tipo, hora_inicio, hora_fim, profissional_id, empresa_id, observacao, created_at) VALUES ('GRADE', '09:00:00', '18:00:00', 1, 1, 'Disponível durante a semana', NOW());
+INSERT INTO disponibilidades (tipo, hora_inicio, hora_fim, profissional_id, empresa_id, observacao, created_at) VALUES ('GRADE', '09:00:00', '18:00:00', 2, 1, 'Disponível durante a semana', NOW());
 
 -- GRADE - diasSemana (segunda a sexta: 1-5)
 INSERT INTO disponibilidade_dias_semana (disponibilidade_id, dia_semana) VALUES (1, 1), (1, 2), (1, 3), (1, 4), (1, 5);
