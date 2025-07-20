@@ -7,16 +7,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.agendasim.dto.AgendaClienteDTO;
+import com.agendasim.model.Agenda;
 import com.agendasim.model.Disponibilidade;
 import com.agendasim.model.Servico;
 import com.agendasim.service.AgendaService;
 import com.agendasim.service.DisponibilidadeService;
 import com.agendasim.service.ServicoService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/agendamentos")
@@ -30,7 +35,15 @@ public class AgendamentoController {
 
     @Autowired
     private AgendaService agendaService;
+
     
+    // Cria Agendamento
+    @PostMapping
+    public ResponseEntity<Agenda> criar(@RequestParam Long empresaId,
+            @Valid @RequestBody Agenda agenda) {
+        return ResponseEntity.ok(agendaService.criar(agenda, empresaId));
+    }
+
     // LISTAR (sempre requer empresaId)
     @GetMapping("/servicos")
     public ResponseEntity<List<Servico>> listarPorEmpresa(@RequestParam Long empresaId) {
@@ -42,10 +55,10 @@ public class AgendamentoController {
             @RequestParam Long empresaId,
             @RequestParam Long profissionalId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
-        
+
         List<Disponibilidade> lista = disponibilidadeService
                 .listarPorEmpresaProfissionalEData(empresaId, profissionalId, data);
-        
+
         return ResponseEntity.ok(lista);
     }
 
