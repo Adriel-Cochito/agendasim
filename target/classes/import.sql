@@ -1,5 +1,5 @@
 -- EMPRESA
-INSERT INTO empresas (nome, email, telefone, cnpj, ativo, created_at) VALUES ('Empresa Exemplo', 'empresa@exemplo.com', '+55 31 99999-8888', '12.345.678/0001-99', true, NOW());
+INSERT INTO empresas (nome, email, telefone, cnpj, ativo, created_at) VALUES ('Salão de Beleza', 'salao@exemplo.com', '+55 31 99999-8888', '12.345.678/0001-99', true, NOW());
 
 -- PROFISSIONAL
 INSERT INTO profissionais (nome, email, senha, perfil, google_access_token, google_refresh_token, empresa_id, ativo, created_at) VALUES ('João Silva', 'joao@empresa.com', '$2a$10$eJlE.0VdkiUH8AgN/8PqsOb8tNsYHIVVGPpxFOZAciGvAX5IgIBoq', 'OWNER', null, null, 1, true, NOW());
@@ -26,6 +26,7 @@ INSERT INTO disponibilidades (tipo, hora_inicio, hora_fim, profissional_id, empr
 
 -- GRADE - diasSemana (segunda a sexta: 1-5)
 INSERT INTO disponibilidade_dias_semana (disponibilidade_id, dia_semana) VALUES (1, 1), (1, 2), (1, 3), (1, 4), (1, 5);
+INSERT INTO disponibilidade_dias_semana (disponibilidade_id, dia_semana) VALUES (2, 1), (2, 2), (2, 3), (2, 4), (2, 5);
 
 -- DISPONIBILIDADE - BLOQUEIO
 INSERT INTO disponibilidades (tipo, data_hora_inicio, data_hora_fim, profissional_id, empresa_id, observacao, created_at) VALUES ('BLOQUEIO', '2025-06-22 12:00:00', '2025-06-22 14:00:00', 1, 1, 'Intervalo para almoço', NOW());
