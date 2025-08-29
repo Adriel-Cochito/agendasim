@@ -13,7 +13,6 @@ com\agendasim\service\ProfissionalService.class
 com\agendasim\dto\ServicoDTOImpl.class
 com\agendasim\security\ProfissionalUserDetailsService.class
 com\agendasim\security\WebConfig.class
-com\agendasim\exception\ValidationExceptionHandler$ValidationErrorResponse.class
 com\agendasim\service\DisponibilidadeService.class
 com\agendasim\dto\AgendaAdminDTO.class
 com\agendasim\dto\DisponibilidadeDTO.class
@@ -21,7 +20,6 @@ com\agendasim\dto\ProfissionalDTOImpl.class
 com\agendasim\model\Disponibilidade.class
 com\agendasim\model\Servico.class
 com\agendasim\service\DisponibilidadeServiceImpl.class
-com\agendasim\exception\ValidationExceptionHandler$ValidationError.class
 com\agendasim\repository\ServicoRepository.class
 com\agendasim\dto\ProfissionalDTO.class
 com\agendasim\mapper\AgendaMapper.class
@@ -44,7 +42,6 @@ com\agendasim\controller\EmpresaController.class
 com\agendasim\AgendasimApplication.class
 com\agendasim\service\AgendaService.class
 com\agendasim\service\EmpresaServiceImpl.class
-com\agendasim\exception\ValidationExceptionHandler.class
 com\agendasim\enums\TipoDisponibilidade.class
 com\agendasim\exception\RecursoNaoEncontradoException.class
 com\agendasim\service\DisponibilidadeServiceImpl$1.class

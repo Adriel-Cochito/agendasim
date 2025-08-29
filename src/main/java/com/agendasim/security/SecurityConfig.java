@@ -1,8 +1,24 @@
 package com.agendasim.security;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+
+import com.agendasim.exception.response.ApiError;
+import com.agendasim.exception.response.ApiResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.UUID;
+import org.springframework.security.access.AccessDeniedException; // ✅ Correto
+
+
+import java.io.IOException;
+
+
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +31,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+
+import com.agendasim.exception.response.ApiError;
+import com.agendasim.exception.response.ApiResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
 @RequiredArgsConstructor
@@ -41,6 +62,31 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
+    private void handleAccessDeniedException(HttpServletRequest request,
+            HttpServletResponse response,
+            AccessDeniedException ex) throws IOException {
+        ApiError error = ApiError.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.FORBIDDEN.value())
+                .error("Access Denied")
+                .message("Você não tem permissão para realizar esta ação")
+                .path(request.getRequestURI())
+                .method(request.getMethod())
+                .traceId(UUID.randomUUID().toString().substring(0, 8))
+                .details(Map.of(
+                        "code", "ACCESS_DENIED",
+                        "suggestion", "Entre em contato com o administrador"))
+                .build();
+
+        response.setStatus(HttpStatus.FORBIDDEN.value());
+        response.setContentType("application/json;charset=UTF-8");
+
+        ApiResponse<Void> apiResponse = ApiResponse.error(error);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.findAndRegisterModules(); // Para LocalDateTime
+        mapper.writeValue(response.getWriter(), apiResponse);
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -48,9 +94,7 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions().disable()) // permite /h2-console em frame
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint((req, res, ex) -> {
-                            res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-                        }))
+                        .accessDeniedHandler(this::handleAccessDeniedException))
 
                 .authorizeHttpRequests(auth -> auth
                         // Rotas públicas (sem autenticação)
