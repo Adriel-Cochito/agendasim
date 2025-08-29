@@ -1,260 +1,271 @@
-// src/main/java/com/agendasim/exception/GlobalExceptionHandler.java
+// GlobalExceptionHandler.java (atualizado)
 package com.agendasim.exception;
 
-import com.agendasim.exception.response.ApiError;
-import com.agendasim.exception.response.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.validation.FieldError;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
-@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<Void>> handleValidationErrors(MethodArgumentNotValidException ex) {
-        String traceId = generateTraceId();
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponse> handleConstraintViolationException(
+            ConstraintViolationException ex, 
+            HttpServletRequest request) {
         
-        List<ApiError.ValidationError> validationErrors = ex.getBindingResult().getFieldErrors()
-                .stream()
-                .map(this::mapFieldError)
-                .collect(Collectors.toList());
-
-        ApiError error = ApiError.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.BAD_REQUEST.value())
-                .error("Validation Failed")
-                .message("Dados inválidos fornecidos")
-                .path(getCurrentPath())
-                .method(getCurrentMethod())
-                .traceId(traceId)
-                .validationErrors(validationErrors)
-                .build();
-
-        log.warn("Validation error - TraceId: {} - Errors: {}", traceId, validationErrors.size());
-
-        return ResponseEntity.badRequest().body(ApiResponse.error(error));
-    }
-
-    @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ApiResponse<Void>> handleBusinessException(BusinessException ex) {
-        String traceId = generateTraceId();
+        String traceId = UUID.randomUUID().toString().substring(0, 8);
         
-        ApiError error = ApiError.builder()
-                .timestamp(LocalDateTime.now())
-                .status(ex.getStatus().value())
-                .error(ex.getStatus().getReasonPhrase())
-                .message(ex.getMessage())
-                .path(getCurrentPath())
-                .method(getCurrentMethod())
-                .traceId(traceId)
-                .details(Map.of("code", ex.getCode()))
-                .build();
-
-        log.warn("Business error - TraceId: {} - Code: {} - Message: {}", 
-                traceId, ex.getCode(), ex.getMessage());
-
-        return ResponseEntity.status(ex.getStatus()).body(ApiResponse.error(error));
-    }
-
-    @ExceptionHandler({AccessDeniedException.class, AccessDeniedException.class})
-    public ResponseEntity<ApiResponse<Void>> handleAccessDenied(Exception ex) {
-        String traceId = generateTraceId();
+        // Log do erro
+        logger.warn("Validation error - TraceId: {} - Violations: {}", traceId, ex.getConstraintViolations().size());
         
-        ApiError error = ApiError.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.FORBIDDEN.value())
-                .error("Access Denied")
-                .message("Você não tem permissão para realizar esta ação")
-                .path(getCurrentPath())
-                .method(getCurrentMethod())
-                .traceId(traceId)
-                .details(Map.of(
-                    "code", "ACCESS_DENIED",
-                    "suggestion", "Entre em contato com o administrador se acredita que deveria ter acesso"
-                ))
-                .build();
-
-        log.warn("Access denied - TraceId: {} - User attempted: {} {}", 
-                traceId, getCurrentMethod(), getCurrentPath());
-
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.error(error));
-    }
-
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ApiResponse<Void>> handleBadCredentials(BadCredentialsException ex) {
-        String traceId = generateTraceId();
+        // Pegar a primeira violação para a mensagem principal
+        ConstraintViolation<?> firstViolation = ex.getConstraintViolations().iterator().next();
+        String mainMessage = firstViolation.getMessage();
         
-        ApiError error = ApiError.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.UNAUTHORIZED.value())
-                .error("Authentication Failed")
-                .message("Credenciais inválidas")
-                .path(getCurrentPath())
-                .method(getCurrentMethod())
-                .traceId(traceId)
-                .details(Map.of(
-                    "code", "INVALID_CREDENTIALS",
-                    "suggestion", "Verifique seu email e senha"
-                ))
-                .build();
-
-        log.warn("Authentication failed - TraceId: {} - Path: {}", traceId, getCurrentPath());
-
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error(error));
-    }
-
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ApiResponse<Void>> handleAuthenticationException(AuthenticationException ex) {
-        String traceId = generateTraceId();
-        
-        ApiError error = ApiError.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.UNAUTHORIZED.value())
-                .error("Authentication Required")
-                .message("Token de autenticação inválido ou expirado")
-                .path(getCurrentPath())
-                .method(getCurrentMethod())
-                .traceId(traceId)
-                .details(Map.of(
-                    "code", "AUTHENTICATION_REQUIRED",
-                    "suggestion", "Faça login novamente"
-                ))
-                .build();
-
-        log.warn("Authentication required - TraceId: {} - Path: {}", traceId, getCurrentPath());
-
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error(error));
-    }
-
-    @ExceptionHandler(RecursoNaoEncontradoException.class)
-    public ResponseEntity<ApiResponse<Void>> handleRecursoNaoEncontrado(RecursoNaoEncontradoException ex) {
-        String traceId = generateTraceId();
-        
-        ApiError error = ApiError.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.NOT_FOUND.value())
-                .error("Resource Not Found")
-                .message(ex.getMessage())
-                .path(getCurrentPath())
-                .method(getCurrentMethod())
-                .traceId(traceId)
-                .details(Map.of(
-                    "code", "RESOURCE_NOT_FOUND",
-                    "suggestion", "Verifique se o ID está correto"
-                ))
-                .build();
-
-        log.warn("Resource not found - TraceId: {} - Message: {}", traceId, ex.getMessage());
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(error));
-    }
-
-    @ExceptionHandler({DataIntegrityViolationException.class, IntegridadeReferencialException.class})
-    public ResponseEntity<ApiResponse<Void>> handleDataIntegrityViolation(Exception ex) {
-        String traceId = generateTraceId();
-        
-        String message = "Não é possível realizar esta operação devido a dependências existentes";
-        String suggestion = "Remova as dependências antes de continuar";
-        
-        if (ex.getMessage() != null) {
-            if (ex.getMessage().contains("SERVICO_PROFISSIONAL")) {
-                message = "Profissional está vinculado a serviços ativos";
-                suggestion = "Remova o profissional dos serviços antes de excluí-lo";
-            } else if (ex.getMessage().contains("AGENDA")) {
-                message = "Existem agendamentos associados";
-                suggestion = "Cancele ou conclua os agendamentos antes de excluir";
+        // Se houver múltiplas violações, combinar as mensagens
+        if (ex.getConstraintViolations().size() > 1) {
+            StringBuilder messages = new StringBuilder();
+            for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
+                if (messages.length() > 0) messages.append("; ");
+                messages.append(violation.getMessage());
             }
+            mainMessage = messages.toString();
         }
+        
+        ErrorResponse errorResponse = new ErrorResponse(
+            false,
+            new ErrorDetails(
+                LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                HttpStatus.BAD_REQUEST.value(),
+                "Validation Error", 
+                mainMessage,
+                request.getRequestURI(),
+                request.getMethod(),
+                traceId,
+                new ErrorDetailsInfo("VALIDATION_ERROR", "Verifique os campos e tente novamente")
+            )
+        );
+        
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
 
-        ApiError error = ApiError.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.CONFLICT.value())
-                .error("Conflict")
-                .message(message)
-                .path(getCurrentPath())
-                .method(getCurrentMethod())
-                .traceId(traceId)
-                .details(Map.of(
-                    "code", "DATA_INTEGRITY_VIOLATION",
-                    "suggestion", suggestion
-                ))
-                .build();
+    @ExceptionHandler(TransactionSystemException.class)
+    public ResponseEntity<ErrorResponse> handleTransactionSystemException(
+            TransactionSystemException ex, 
+            HttpServletRequest request) {
+        
+        String traceId = UUID.randomUUID().toString().substring(0, 8);
+        
+        // Verificar se é um erro de validação dentro da transação
+        if (ex.getCause() != null && ex.getCause().getCause() instanceof ConstraintViolationException) {
+            ConstraintViolationException constraintEx = (ConstraintViolationException) ex.getCause().getCause();
+            
+            logger.warn("Transaction validation error - TraceId: {} - Violations: {}", traceId, constraintEx.getConstraintViolations().size());
+            
+            // Pegar a primeira violação para a mensagem principal
+            ConstraintViolation<?> firstViolation = constraintEx.getConstraintViolations().iterator().next();
+            String mainMessage = firstViolation.getMessage();
+            
+            // Se houver múltiplas violações, combinar as mensagens
+            if (constraintEx.getConstraintViolations().size() > 1) {
+                StringBuilder messages = new StringBuilder();
+                for (ConstraintViolation<?> violation : constraintEx.getConstraintViolations()) {
+                    if (messages.length() > 0) messages.append("; ");
+                    messages.append(violation.getMessage());
+                }
+                mainMessage = messages.toString();
+            }
+            
+            ErrorResponse errorResponse = new ErrorResponse(
+                false,
+                new ErrorDetails(
+                    LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                    HttpStatus.BAD_REQUEST.value(),
+                    "Validation Error",
+                    mainMessage,
+                    request.getRequestURI(),
+                    request.getMethod(),
+                    traceId,
+                    new ErrorDetailsInfo("VALIDATION_ERROR", "Verifique os campos e tente novamente")
+                )
+            );
+            
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
+        
+        // Se não for um erro de validação, tratar como erro interno
+        logger.error("Transaction error - TraceId: {} - Exception: {}", traceId, ex.getMessage(), ex);
+        
+        ErrorResponse errorResponse = new ErrorResponse(
+            false,
+            new ErrorDetails(
+                LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Internal Server Error",
+                "Ocorreu um erro interno no servidor",
+                request.getRequestURI(),
+                request.getMethod(),
+                traceId,
+                new ErrorDetailsInfo("INTERNAL_ERROR", "Tente novamente em alguns instantes")
+            )
+        );
+        
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    }
 
-        log.warn("Data integrity violation - TraceId: {} - Message: {}", traceId, message);
-
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiResponse.error(error));
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(
+            MethodArgumentNotValidException ex, 
+            HttpServletRequest request) {
+        
+        String traceId = UUID.randomUUID().toString().substring(0, 8);
+        
+        logger.warn("Method argument validation error - TraceId: {} - Field errors: {}", traceId, ex.getFieldErrorCount());
+        
+        // Pegar o primeiro erro de campo
+        String mainMessage = "Dados inválidos";
+        if (ex.getFieldError() != null) {
+            mainMessage = ex.getFieldError().getDefaultMessage();
+        }
+        
+        // Se houver múltiplos erros, combinar as mensagens
+        if (ex.getFieldErrorCount() > 1) {
+            StringBuilder messages = new StringBuilder();
+            ex.getFieldErrors().forEach(error -> {
+                if (messages.length() > 0) messages.append("; ");
+                messages.append(error.getDefaultMessage());
+            });
+            mainMessage = messages.toString();
+        }
+        
+        ErrorResponse errorResponse = new ErrorResponse(
+            false,
+            new ErrorDetails(
+                LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                HttpStatus.BAD_REQUEST.value(),
+                "Validation Error",
+                mainMessage,
+                request.getRequestURI(),
+                request.getMethod(),
+                traceId,
+                new ErrorDetailsInfo("VALIDATION_ERROR", "Verifique os campos e tente novamente")
+            )
+        );
+        
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Void>> handleGenericException(Exception ex) {
-        String traceId = generateTraceId();
+    public ResponseEntity<ErrorResponse> handleGenericException(
+            Exception ex, 
+            HttpServletRequest request) {
         
-        ApiError error = ApiError.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .error("Internal Server Error")
-                .message("Ocorreu um erro interno no servidor")
-                .path(getCurrentPath())
-                .method(getCurrentMethod())
-                .traceId(traceId)
-                .details(Map.of(
-                    "code", "INTERNAL_ERROR",
-                    "suggestion", "Tente novamente em alguns instantes"
-                ))
-                .build();
-
-        log.error("Internal server error - TraceId: {} - Exception: {}", 
-                traceId, ex.getMessage(), ex);
-
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.error(error));
+        String traceId = UUID.randomUUID().toString().substring(0, 8);
+        
+        logger.error("Internal server error - TraceId: {} - Exception: {}", traceId, ex.getMessage(), ex);
+        
+        ErrorResponse errorResponse = new ErrorResponse(
+            false,
+            new ErrorDetails(
+                LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Internal Server Error",
+                "Ocorreu um erro interno no servidor",
+                request.getRequestURI(),
+                request.getMethod(),
+                traceId,
+                new ErrorDetailsInfo("INTERNAL_ERROR", "Tente novamente em alguns instantes")
+            )
+        );
+        
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 
-    private ApiError.ValidationError mapFieldError(FieldError fieldError) {
-        return ApiError.ValidationError.builder()
-                .field(fieldError.getField())
-                .rejectedValue(fieldError.getRejectedValue())
-                .message(fieldError.getDefaultMessage())
-                .code(fieldError.getCode())
-                .build();
-    }
-
-    private String generateTraceId() {
-        return UUID.randomUUID().toString().substring(0, 8);
-    }
-
-    private String getCurrentPath() {
-        ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (attrs != null) {
-            HttpServletRequest request = attrs.getRequest();
-            return request.getRequestURI();
+    // Classes para estrutura de resposta de erro
+    public static class ErrorResponse {
+        private boolean success;
+        private ErrorDetails error;
+        
+        public ErrorResponse(boolean success, ErrorDetails error) {
+            this.success = success;
+            this.error = error;
         }
-        return "unknown";
+        
+        // Getters e Setters
+        public boolean isSuccess() { return success; }
+        public void setSuccess(boolean success) { this.success = success; }
+        public ErrorDetails getError() { return error; }
+        public void setError(ErrorDetails error) { this.error = error; }
     }
-
-    private String getCurrentMethod() {
-        ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (attrs != null) {
-            HttpServletRequest request = attrs.getRequest();
-            return request.getMethod();
+    
+    public static class ErrorDetails {
+        private String timestamp;
+        private int status;
+        private String error;
+        private String message;
+        private String path;
+        private String method;
+        private String traceId;
+        private ErrorDetailsInfo details;
+        
+        public ErrorDetails(String timestamp, int status, String error, String message, 
+                          String path, String method, String traceId, ErrorDetailsInfo details) {
+            this.timestamp = timestamp;
+            this.status = status;
+            this.error = error;
+            this.message = message;
+            this.path = path;
+            this.method = method;
+            this.traceId = traceId;
+            this.details = details;
         }
-        return "unknown";
+        
+        // Getters e Setters
+        public String getTimestamp() { return timestamp; }
+        public void setTimestamp(String timestamp) { this.timestamp = timestamp; }
+        public int getStatus() { return status; }
+        public void setStatus(int status) { this.status = status; }
+        public String getError() { return error; }
+        public void setError(String error) { this.error = error; }
+        public String getMessage() { return message; }
+        public void setMessage(String message) { this.message = message; }
+        public String getPath() { return path; }
+        public void setPath(String path) { this.path = path; }
+        public String getMethod() { return method; }
+        public void setMethod(String method) { this.method = method; }
+        public String getTraceId() { return traceId; }
+        public void setTraceId(String traceId) { this.traceId = traceId; }
+        public ErrorDetailsInfo getDetails() { return details; }
+        public void setDetails(ErrorDetailsInfo details) { this.details = details; }
+    }
+    
+    public static class ErrorDetailsInfo {
+        private String code;
+        private String suggestion;
+        
+        public ErrorDetailsInfo(String code, String suggestion) {
+            this.code = code;
+            this.suggestion = suggestion;
+        }
+        
+        // Getters e Setters
+        public String getCode() { return code; }
+        public void setCode(String code) { this.code = code; }
+        public String getSuggestion() { return suggestion; }
+        public void setSuggestion(String suggestion) { this.suggestion = suggestion; }
     }
 }
