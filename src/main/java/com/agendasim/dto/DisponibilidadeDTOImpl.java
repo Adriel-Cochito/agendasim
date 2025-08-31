@@ -38,7 +38,6 @@ public class DisponibilidadeDTOImpl implements DisponibilidadeDTO {
         } else {
             throw new RecursoNaoEncontradoException("Disponibilidade com ID " + id + " não encontrado");
         }
-        
     }
 
     @Override
@@ -55,6 +54,7 @@ public class DisponibilidadeDTOImpl implements DisponibilidadeDTO {
         int diaSemana = data.getDayOfWeek().getValue(); // 1=Seg, ..., 7=Dom
         if (diaSemana == 7) diaSemana = 0; // H2 usa 0=Dom
 
+        // CORREÇÃO: Query melhorada para considerar intervalos de bloqueio/liberação
         String jpql = """
             SELECT d FROM Disponibilidade d
             WHERE d.empresa.id = :empresaId
@@ -62,7 +62,9 @@ public class DisponibilidadeDTOImpl implements DisponibilidadeDTO {
             AND (
                 (d.tipo = 'GRADE' AND :diaSemana MEMBER OF d.diasSemana)
                 OR
-                (d.tipo IN ('BLOQUEIO', 'LIBERADO') AND CAST(d.dataHoraInicio AS date) = :data)
+                (d.tipo IN ('BLOQUEIO', 'LIBERADO') 
+                 AND CAST(d.dataHoraInicio AS date) <= :data 
+                 AND CAST(d.dataHoraFim AS date) >= :data)
             )
         """;
 
@@ -74,9 +76,6 @@ public class DisponibilidadeDTOImpl implements DisponibilidadeDTO {
                 .getResultList();
     }
 
-
-
-
     @Override
     public List<Disponibilidade> listarPorEmpresa(Long empresaId) {
         String jpql = "SELECT d FROM Disponibilidade d WHERE d.empresa.id = :empresaId";
@@ -84,23 +83,48 @@ public class DisponibilidadeDTOImpl implements DisponibilidadeDTO {
                 .setParameter("empresaId", empresaId)
                 .getResultList();
     }
-    
-    
 
     @Override
     public boolean existeConflito(Disponibilidade disponibilidade) {
-        String jpql = "SELECT COUNT(d) FROM Disponibilidade d " +
-                      "WHERE d.profissional.id = :profissionalId " +
-                      "AND d.empresa.id = :empresaId " +
-                      "AND d.tipo = 'BLOQUEIO' " +
-                      "AND d.dataHoraInicio = :dataHoraInicio";
-
-        Long count = entityManager.createQuery(jpql, Long.class)
-                .setParameter("profissionalId", disponibilidade.getProfissional().getId())
-                .setParameter("empresaId", disponibilidade.getEmpresa().getId())
-                .setParameter("dataHoraInicio", disponibilidade.getDataHoraInicio())
-                .getSingleResult();
-
-        return count > 0;
+        // CORREÇÃO: Melhorar a verificação de conflito para considerar intervalos sobrepostos
+        String jpql;
+        
+        if (disponibilidade.getTipo().name().equals("GRADE")) {
+            // Para tipo GRADE, verificar conflito de dias da semana
+            jpql = "SELECT COUNT(d) FROM Disponibilidade d " +
+                   "WHERE d.profissional.id = :profissionalId " +
+                   "AND d.empresa.id = :empresaId " +
+                   "AND d.tipo = 'BLOQUEIO' " +
+                   "AND d.id != :disponibilidadeId " +
+                   "AND SIZE(d.diasSemana) > 0";
+            
+            Long count = entityManager.createQuery(jpql, Long.class)
+                    .setParameter("profissionalId", disponibilidade.getProfissional().getId())
+                    .setParameter("empresaId", disponibilidade.getEmpresa().getId())
+                    .setParameter("disponibilidadeId", disponibilidade.getId() != null ? disponibilidade.getId() : 0L)
+                    .getSingleResult();
+            
+            return count > 0;
+        } else {
+            // Para BLOQUEIO/LIBERADO, verificar sobreposição de intervalos
+            jpql = "SELECT COUNT(d) FROM Disponibilidade d " +
+                   "WHERE d.profissional.id = :profissionalId " +
+                   "AND d.empresa.id = :empresaId " +
+                   "AND d.tipo = 'BLOQUEIO' " +
+                   "AND d.id != :disponibilidadeId " +
+                   "AND d.dataHoraInicio IS NOT NULL " +
+                   "AND d.dataHoraFim IS NOT NULL " +
+                   "AND (d.dataHoraInicio < :dataHoraFim AND d.dataHoraFim > :dataHoraInicio)";
+            
+            Long count = entityManager.createQuery(jpql, Long.class)
+                    .setParameter("profissionalId", disponibilidade.getProfissional().getId())
+                    .setParameter("empresaId", disponibilidade.getEmpresa().getId())
+                    .setParameter("disponibilidadeId", disponibilidade.getId() != null ? disponibilidade.getId() : 0L)
+                    .setParameter("dataHoraInicio", disponibilidade.getDataHoraInicio())
+                    .setParameter("dataHoraFim", disponibilidade.getDataHoraFim())
+                    .getSingleResult();
+            
+            return count > 0;
+        }
     }
 }
