@@ -28,17 +28,17 @@ public class Agenda {
     private String telefoneCliente;
 
     @NotNull(message = "A empresa é obrigatória")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "empresa_id")
     private Empresa empresa;
 
     @NotNull(message = "O profissional é obrigatório")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "profissional_id")
     private Profissional profissional;
 
     @NotNull(message = "O serviço é obrigatório")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "servico_id")
     private Servico servico;
 

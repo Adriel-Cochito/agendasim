@@ -30,7 +30,7 @@ public class Disponibilidade {
     private LocalDateTime dataHoraFim;
 
     // Para GRADE
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "disponibilidade_dias_semana", joinColumns = @JoinColumn(name = "disponibilidade_id"))
     @Column(name = "dia_semana")
     private List<Integer> diasSemana; // 0=Dom, 1=Seg, ..., 6=Sáb
@@ -38,12 +38,12 @@ public class Disponibilidade {
     private LocalTime horaInicio; // apenas para GRADE
     private LocalTime horaFim; // apenas para GRADE
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "profissional_id")
     @NotNull
     private Profissional profissional;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "empresa_id")
     @NotNull
     private Empresa empresa;
