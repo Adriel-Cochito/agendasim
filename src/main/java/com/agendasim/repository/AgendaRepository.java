@@ -48,11 +48,6 @@ public interface AgendaRepository extends JpaRepository<Agenda, Long> {
                         obj -> ((Number) obj[1]).longValue()));
     }
 
-    // Agendamentos por dia para gráfico - versão simplificada usando DATE()
-    @Query(value = "SELECT DATE(data_hora), COUNT(*) FROM agendas WHERE empresa_id = :empresaId AND DATE(data_hora) BETWEEN :dataInicio AND :dataFim GROUP BY DATE(data_hora) ORDER BY DATE(data_hora)", nativeQuery = true)
-    List<Object[]> findAgendamentosPorDia(@Param("empresaId") Long empresaId,
-            @Param("dataInicio") LocalDate dataInicio,
-            @Param("dataFim") LocalDate dataFim);
 
     // Top 5 serviços mais procurados
     @Query(value = "SELECT s.id, s.titulo, COUNT(a.id) FROM agendas a JOIN servicos s ON a.servico_id = s.id WHERE a.empresa_id = :empresaId GROUP BY s.id, s.titulo ORDER BY COUNT(a.id) DESC LIMIT 5", nativeQuery = true)
@@ -82,5 +77,25 @@ public interface AgendaRepository extends JpaRepository<Agenda, Long> {
     // Conflitos de horário - versão simplificada
     @Query(value = "SELECT COUNT(*) FROM (SELECT profissional_id, data_hora FROM agendas WHERE empresa_id = :empresaId GROUP BY profissional_id, data_hora HAVING COUNT(*) > 1) AS conflitos", nativeQuery = true)
     Long countConflitosHorario(@Param("empresaId") Long empresaId);
+
+    // CORREÇÃO: Query melhorada para agendamentos por dia
+    @Query(value = "SELECT CAST(data_hora AS DATE) as dia, COUNT(*) as quantidade " +
+                   "FROM agendas " +
+                   "WHERE empresa_id = :empresaId " +
+                   "AND CAST(data_hora AS DATE) >= :dataInicio " +
+                   "AND CAST(data_hora AS DATE) <= :dataFim " +
+                   "GROUP BY CAST(data_hora AS DATE) " +
+                   "ORDER BY CAST(data_hora AS DATE)", nativeQuery = true)
+    List<Object[]> findAgendamentosPorDia(@Param("empresaId") Long empresaId,
+            @Param("dataInicio") LocalDate dataInicio,
+            @Param("dataFim") LocalDate dataFim);
+
+    // NOVO: Query para debug - contar total de agendamentos da empresa
+    @Query("SELECT COUNT(a) FROM Agenda a WHERE a.empresa.id = :empresaId")
+    Long countTotalAgendamentosByEmpresa(@Param("empresaId") Long empresaId);
+
+    // NOVO: Query alternativa mais simples para agendamentos por dia
+    @Query(value = "SELECT DATE(data_hora) as dia, COUNT(*) as qtd FROM agendas WHERE empresa_id = :empresaId GROUP BY DATE(data_hora) ORDER BY DATE(data_hora) DESC LIMIT 15", nativeQuery = true)
+    List<Object[]> findUltimosAgendamentosPorDia(@Param("empresaId") Long empresaId);
 
 }
