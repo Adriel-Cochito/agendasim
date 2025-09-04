@@ -20,8 +20,8 @@ public class CriarEmpresaComOwnerDTO {
     @NotBlank(message = "O telefone da empresa é obrigatório")
     private String telefoneEmpresa;
 
-    @NotBlank(message = "O CNPJ é obrigatório")
-    @Pattern(regexp = "\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}", message = "CNPJ inválido. Formato esperado: 00.000.000/0000-00")
+    // CNPJ agora é opcional - só valida se não estiver vazio
+    @Pattern(regexp = "^$|\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}", message = "CNPJ inválido. Formato esperado: 00.000.000/0000-00 ou deixe em branco")
     private String cnpjEmpresa;
 
     private Boolean ativoEmpresa = true;
