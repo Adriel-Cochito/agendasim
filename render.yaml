@@ -1,10 +1,9 @@
 services:
   - type: web
     name: agendasim-api
-    env: node
+    env: docker
     plan: free
-    buildCommand: npm run build
-    startCommand: npm start
+    dockerfilePath: ./Dockerfile
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
