@@ -32,6 +32,13 @@ public class Servico {
     @Positive(message = "O preço deve ser maior que zero")
     private Double preco;
 
+    /**
+     * Duração do serviço em minutos.
+     * Campo essencial para controle de agenda, usado para:
+     * - Calcular horários disponíveis dos profissionais
+     * - Evitar sobreposição de agendamentos
+     * - Planejar a agenda de forma eficiente
+     */
     @NotNull(message = "A duração é obrigatória")
     @Positive(message = "A duração deve ser maior que zero")
     private Integer duracao;
