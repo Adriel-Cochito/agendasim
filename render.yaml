@@ -1,10 +1,9 @@
 services:
   - type: web
     name: agendasim-api
-    env: java
+    env: docker
     plan: free
-    buildCommand: ./mvnw clean package -DskipTests
-    startCommand: java -jar target/agendasim-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
+    dockerfilePath: ./Dockerfile
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod

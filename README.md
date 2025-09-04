@@ -2,36 +2,41 @@
 
 Sistema de agendamento com autenticação JWT.
 
-## Configuração para Deploy no Render
+## 🚀 Deploy no Render (Docker)
 
 ### 1. Configurações de Ambiente
 
-A aplicação está configurada para rodar no Render com as seguintes configurações:
+A aplicação está configurada para rodar no Render usando Docker com as seguintes configurações:
 
 - **Database**: H2 (arquivo persistente)
 - **Porta**: Dinâmica (definida pelo Render via variável `PORT`)
 - **CORS**: Configurado para aceitar requisições do frontend `https://agendasim.netlify.app`
+- **Container**: Docker com OpenJDK 21
 
-### 2. Variáveis de Ambiente no Render
+### 2. Deploy Automático (Recomendado)
 
-Configure as seguintes variáveis de ambiente no painel do Render:
-
-- `SPRING_PROFILES_ACTIVE`: `prod`
-- `JWT_SECRET`: (gerar uma chave secreta forte)
-- `DB_PASSWORD`: (senha para o banco H2)
-
-### 3. Deploy
-
-#### Opção 1: Usando render.yaml (Recomendado)
+#### Usando render.yaml
 1. Faça push do código para o repositório
 2. No Render, conecte o repositório
 3. O arquivo `render.yaml` será detectado automaticamente
+4. Configure as variáveis de ambiente:
+   - `SPRING_PROFILES_ACTIVE`: `prod`
+   - `JWT_SECRET`: (gerar uma chave secreta forte)
+   - `DB_PASSWORD`: (senha para o banco H2)
 
-#### Opção 2: Configuração Manual
-1. **Build Command**: `./mvnw clean package -DskipTests`
-2. **Start Command**: `java -jar target/agendasim-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod`
-3. **Environment**: `Java`
-4. **Plan**: `Free`
+### 3. Deploy Manual
+
+#### Configurações no Render:
+1. **Language/Runtime**: `Docker`
+2. **Dockerfile Path**: `./Dockerfile`
+3. **Build Command**: (deixe em branco)
+4. **Start Command**: (deixe em branco)
+5. **Plan**: `Free`
+
+#### Variáveis de Ambiente:
+- `SPRING_PROFILES_ACTIVE` = `prod`
+- `JWT_SECRET` = (gere uma chave secreta forte)
+- `DB_PASSWORD` = (defina uma senha para o banco)
 
 ### 4. Health Check
 
@@ -51,12 +56,24 @@ A API está configurada para aceitar requisições dos seguintes origins:
 - `http://localhost:3001` (desenvolvimento)
 - `https://agendasim.netlify.app` (produção)
 
-## Desenvolvimento Local
+## 🛠️ Desenvolvimento Local
 
-Para rodar localmente:
-
+### Opção 1: Maven (Recomendado)
 ```bash
 ./mvnw spring-boot:run
+```
+
+### Opção 2: Docker
+```bash
+# Build da imagem
+docker build -t agendasim-api .
+
+# Executar container
+docker run -p 8080:8080 \
+  -e SPRING_PROFILES_ACTIVE=prod \
+  -e JWT_SECRET=sua-chave-secreta \
+  -e DB_PASSWORD=sua-senha \
+  agendasim-api
 ```
 
 A aplicação estará disponível em `http://localhost:8080`
@@ -65,9 +82,25 @@ A aplicação estará disponível em `http://localhost:8080`
 - URL: `http://localhost:8080/swagger-ui.html`
 - H2 Console: `http://localhost:8080/h2-console`
 
-## Estrutura do Projeto
+## 📁 Estrutura do Projeto
 
 - `src/main/java/com/agendasim/`: Código fonte Java
 - `src/main/resources/`: Configurações e recursos
+- `Dockerfile`: Configuração do container Docker
 - `render.yaml`: Configuração para deploy no Render
+- `.dockerignore`: Arquivos ignorados no build Docker
 - `pom.xml`: Dependências Maven
+
+## 🔧 Configurações Docker
+
+### Dockerfile
+- Base: OpenJDK 21
+- Maven wrapper para build
+- H2 database persistente
+- Health checks configurados
+
+### Otimizações
+- Cache de dependências Maven
+- Logs otimizados para produção
+- Configurações de performance do Tomcat
+- Swagger desabilitado em produção
