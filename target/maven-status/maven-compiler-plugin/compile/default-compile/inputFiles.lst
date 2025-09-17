@@ -33,6 +33,7 @@ C:\Projetos\agendasim\src\main\java\com\agendasim\dto\dashboard\AgendamentoPorDi
 C:\Projetos\agendasim\src\main\java\com\agendasim\service\AgendaService.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\dto\dashboard\AgendamentosHojeDTO.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\exception\response\ApiResponse.java
+C:\Projetos\agendasim\src\main\java\com\agendasim\exception\ConflitoAgendamentoException.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\dto\dashboard\MetricasPrincipaisDTO.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\enums\TipoDisponibilidade.java
 C:\Projetos\agendasim\src\main\java\com\agendasim\exception\IntegridadeReferencialException.java

@@ -94,7 +94,7 @@ public class DisponibilidadeDTOImpl implements DisponibilidadeDTO {
             jpql = "SELECT COUNT(d) FROM Disponibilidade d " +
                    "WHERE d.profissional.id = :profissionalId " +
                    "AND d.empresa.id = :empresaId " +
-                   "AND d.tipo = 'BLOQUEIO' " +
+                   "AND d.tipo IN ('BLOQUEIO', 'BLOQUEIO_GRADE') " +
                    "AND d.id != :disponibilidadeId " +
                    "AND SIZE(d.diasSemana) > 0";
             
@@ -110,7 +110,7 @@ public class DisponibilidadeDTOImpl implements DisponibilidadeDTO {
             jpql = "SELECT COUNT(d) FROM Disponibilidade d " +
                    "WHERE d.profissional.id = :profissionalId " +
                    "AND d.empresa.id = :empresaId " +
-                   "AND d.tipo = 'BLOQUEIO' " +
+                   "AND d.tipo IN ('BLOQUEIO', 'BLOQUEIO_GRADE') " +
                    "AND d.id != :disponibilidadeId " +
                    "AND d.dataHoraInicio IS NOT NULL " +
                    "AND d.dataHoraFim IS NOT NULL " +

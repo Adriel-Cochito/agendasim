@@ -126,4 +126,53 @@ public class AgendaDTOImpl implements AgendaDTO {
 
         return query.getResultList();
     }
+
+    @Override
+    public boolean existeConflitoAgendamento(Agenda agenda) {
+        // Verificar conflito com outros agendamentos no mesmo horário
+        String jpqlAgenda = "SELECT COUNT(a) FROM Agenda a " +
+                           "WHERE a.empresa.id = :empresaId " +
+                           "AND a.profissional.id = :profissionalId " +
+                           "AND a.dataHora = :dataHora " +
+                           "AND a.id != :agendaId";
+        
+        Long countAgenda = entityManager.createQuery(jpqlAgenda, Long.class)
+                .setParameter("empresaId", agenda.getEmpresa().getId())
+                .setParameter("profissionalId", agenda.getProfissional().getId())
+                .setParameter("dataHora", agenda.getDataHora())
+                .setParameter("agendaId", agenda.getId() != null ? agenda.getId() : 0L)
+                .getSingleResult();
+        
+        if (countAgenda > 0) {
+            return true;
+        }
+        
+        // Verificar conflito com bloqueios (BLOQUEIO e BLOQUEIO_GRADE)
+        java.time.LocalDate data = agenda.getDataHora().atZone(java.time.ZoneOffset.UTC).toLocalDate();
+        int diaSemana = data.getDayOfWeek().getValue(); // 1=Seg, ..., 7=Dom
+        if (diaSemana == 7) diaSemana = 0; // H2 usa 0=Dom
+        
+        String jpqlBloqueio = """
+            SELECT COUNT(d) FROM Disponibilidade d
+            WHERE d.empresa.id = :empresaId
+            AND d.profissional.id = :profissionalId
+            AND d.tipo IN ('BLOQUEIO', 'BLOQUEIO_GRADE')
+            AND (
+                (d.tipo = 'BLOQUEIO_GRADE' AND :diaSemana MEMBER OF d.diasSemana)
+                OR
+                (d.tipo = 'BLOQUEIO' 
+                 AND CAST(d.dataHoraInicio AS date) <= :data 
+                 AND CAST(d.dataHoraFim AS date) >= :data)
+            )
+        """;
+        
+        Long countBloqueio = entityManager.createQuery(jpqlBloqueio, Long.class)
+                .setParameter("empresaId", agenda.getEmpresa().getId())
+                .setParameter("profissionalId", agenda.getProfissional().getId())
+                .setParameter("data", data)
+                .setParameter("diaSemana", diaSemana)
+                .getSingleResult();
+        
+        return countBloqueio > 0;
+    }
 }

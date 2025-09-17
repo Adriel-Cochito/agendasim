@@ -3,9 +3,9 @@ package com.agendasim.service;
 import com.agendasim.dto.AgendaAdminDTO;
 import com.agendasim.dto.AgendaClienteDTO;
 import com.agendasim.dto.AgendaDTO;
+import com.agendasim.exception.ConflitoAgendamentoException;
 import com.agendasim.mapper.AgendaMapper;
 import com.agendasim.model.Agenda;
-import com.agendasim.model.Disponibilidade;
 import com.agendasim.model.Empresa;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +30,11 @@ public class AgendaServiceImpl implements AgendaService {
         empresa.setId(empresaId);
         agenda.setEmpresa(empresa);
 
+        // Validar conflitos de horário antes de salvar
+        if (agendaDTO.existeConflitoAgendamento(agenda)) {
+            throw new ConflitoAgendamentoException("Não é possível criar o agendamento: conflito de horário com outro agendamento ou bloqueio existente.");
+        }
+
         return agendaDTO.salvar(agenda);
     }
 
@@ -50,6 +55,12 @@ public class AgendaServiceImpl implements AgendaService {
         Empresa empresa = new Empresa();
         empresa.setId(empresaId);
         agenda.setEmpresa(empresa);
+        agenda.setId(id); // Definir o ID para a validação
+
+        // Validar conflitos de horário antes de atualizar
+        if (agendaDTO.existeConflitoAgendamento(agenda)) {
+            throw new ConflitoAgendamentoException("Não é possível atualizar o agendamento: conflito de horário com outro agendamento ou bloqueio existente.");
+        }
 
         return agendaDTO.atualizar(id, agenda);
     }

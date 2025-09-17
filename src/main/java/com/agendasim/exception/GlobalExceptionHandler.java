@@ -51,6 +51,35 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
+    /**
+     * NOVO: Trata especificamente a exception de conflito de agendamento
+     */
+    @ExceptionHandler(ConflitoAgendamentoException.class)
+    public ResponseEntity<ErrorResponse> handleConflitoAgendamento(
+            ConflitoAgendamentoException ex, 
+            HttpServletRequest request) {
+        
+        String traceId = UUID.randomUUID().toString().substring(0, 8);
+        
+        logger.warn("Conflito de agendamento - TraceId: {} - Message: {}", traceId, ex.getMessage());
+        
+        ErrorResponse errorResponse = new ErrorResponse(
+            false,
+            new ErrorDetails(
+                LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                HttpStatus.CONFLICT.value(),
+                "Conflito de Agendamento",
+                ex.getMessage(),
+                request.getRequestURI(),
+                request.getMethod(),
+                traceId,
+                new ErrorDetailsInfo("SCHEDULING_CONFLICT", "Escolha outro horário ou profissional para o agendamento")
+            )
+        );
+        
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorResponse> handleConstraintViolationException(
             ConstraintViolationException ex, 
