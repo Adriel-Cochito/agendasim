@@ -33,8 +33,7 @@ public class Empresa {
     @NotBlank(message = "O telefone é obrigatório")
     private String telefone;
 
-   
-    @Pattern(regexp = "\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}", message = "CNPJ inválido. Formato esperado: 00.000.000/0000-00")
+    @Pattern(regexp = "(^$|\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2})", message = "CNPJ inválido. Formato esperado: 00.000.000/0000-00")
     private String cnpj;
 
     @Column(nullable = false)
