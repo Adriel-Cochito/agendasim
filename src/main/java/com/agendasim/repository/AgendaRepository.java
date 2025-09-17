@@ -98,4 +98,18 @@ public interface AgendaRepository extends JpaRepository<Agenda, Long> {
     @Query(value = "SELECT DATE(data_hora) as dia, COUNT(*) as qtd FROM agendas WHERE empresa_id = :empresaId GROUP BY DATE(data_hora) ORDER BY DATE(data_hora) DESC LIMIT 15", nativeQuery = true)
     List<Object[]> findUltimosAgendamentosPorDia(@Param("empresaId") Long empresaId);
 
+    // Queries de conflito de agendamento
+    @Query("SELECT COUNT(a) FROM Agenda a WHERE a.empresa.id = :empresaId AND a.profissional.id = :profissionalId AND a.dataHora = :dataHora AND a.id != :agendaId")
+    Long countConflitoAgendamento(@Param("empresaId") Long empresaId, @Param("profissionalId") Long profissionalId, @Param("dataHora") Instant dataHora, @Param("agendaId") Long agendaId);
+
+    // Queries de listagem complexas
+    @Query("SELECT a FROM Agenda a WHERE a.empresa.id = :empresaId AND a.servico.id = :servicoId AND a.profissional.id = :profissionalId")
+    List<Agenda> findByEmpresaServicoEProfissional(@Param("empresaId") Long empresaId, @Param("servicoId") Long servicoId, @Param("profissionalId") Long profissionalId);
+
+    @Query("SELECT a FROM Agenda a WHERE a.empresa.id = :empresaId AND a.servico.id = :servicoId AND a.profissional.id = :profissionalId AND a.dataHora BETWEEN :inicio AND :fim")
+    List<Agenda> findByEmpresaServicoEProfissionalEData(@Param("empresaId") Long empresaId, @Param("servicoId") Long servicoId, @Param("profissionalId") Long profissionalId, @Param("inicio") Instant inicio, @Param("fim") Instant fim);
+
+    @Query("SELECT a FROM Agenda a WHERE a.empresa.id = :empresaId AND a.profissional.id = :profissionalId AND a.dataHora BETWEEN :inicio AND :fim")
+    List<Agenda> findByEmpresaProfissionalEData(@Param("empresaId") Long empresaId, @Param("profissionalId") Long profissionalId, @Param("inicio") Instant inicio, @Param("fim") Instant fim);
+
 }

@@ -1,8 +1,9 @@
 package com.agendasim.service;
 
-import com.agendasim.dto.ProfissionalDTO;
 import com.agendasim.dto.ProfissionalPatchDTO;
+import com.agendasim.exception.RecursoNaoEncontradoException;
 import com.agendasim.model.Profissional;
+import com.agendasim.repository.ProfissionalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,52 +11,85 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProfissionalServiceImpl implements ProfissionalService {
+public class ProfissionalService {
 
     @Autowired
-    private ProfissionalDTO profissionalDTO;
+    private ProfissionalRepository profissionalRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    @Override
     public Profissional salvar(Profissional profissional) {
         profissional.setSenha(passwordEncoder.encode(profissional.getSenha()));
-        return profissionalDTO.salvar(profissional);
+        return profissionalRepository.save(profissional);
     }
 
-    @Override
     public List<Profissional> listarTodos() {
-        return profissionalDTO.listarTodos();
+        return profissionalRepository.findAll();
     }
 
-    @Override
     public Profissional buscarPorId(Long id) {
-        return profissionalDTO.buscarPorId(id);
+        return profissionalRepository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Profissional id=" + id + " não encontrado"));
     }
 
-    @Override
     public void excluir(Long id) {
-        profissionalDTO.excluir(id);
-    }
-
-    @Override
-    public Profissional atualizar(Long id, Profissional profissional) {
-        return profissionalDTO.atualizar(id, profissional);
-    }
-
-    @Override
-    public List<Profissional> listarPorEmpresa(Long empresaId) {
-        return profissionalDTO.listarPorEmpresa(empresaId);
-    }
-
-    @Override
-    public Profissional atualizarParcial(Long id, ProfissionalPatchDTO patchDTO) {
-        // Se senha for enviada, criptografar
-        if (patchDTO.getSenha() != null) {
-            patchDTO.setSenha(passwordEncoder.encode(patchDTO.getSenha()));
+        if (!profissionalRepository.existsById(id)) {
+            throw new RecursoNaoEncontradoException("Profissional com ID " + id + " não encontrado");
         }
-        return profissionalDTO.atualizarParcial(id, patchDTO);
+        profissionalRepository.deleteById(id);
     }
 
+    public Profissional atualizar(Long id, Profissional profissional) {
+        Profissional existente = buscarPorId(id);
+        
+        existente.setNome(profissional.getNome());
+        existente.setEmail(profissional.getEmail());
+        existente.setPerfil(profissional.getPerfil());
+        existente.setAtivo(profissional.getAtivo());
+        existente.setEmpresaId(profissional.getEmpresaId());
+        existente.setGoogleAccessToken(profissional.getGoogleAccessToken());
+        existente.setGoogleRefreshToken(profissional.getGoogleRefreshToken());
+        
+        // Se senha for fornecida, criptografar
+        if (profissional.getSenha() != null && !profissional.getSenha().isEmpty()) {
+            existente.setSenha(passwordEncoder.encode(profissional.getSenha()));
+        }
+        
+        return profissionalRepository.save(existente);
+    }
+
+    public List<Profissional> listarPorEmpresa(Long empresaId) {
+        return profissionalRepository.findByEmpresaId(empresaId);
+    }
+
+    public Profissional atualizarParcial(Long id, ProfissionalPatchDTO patchDTO) {
+        Profissional existente = buscarPorId(id);
+        
+        if (patchDTO.getNome() != null) {
+            existente.setNome(patchDTO.getNome());
+        }
+        if (patchDTO.getEmail() != null) {
+            existente.setEmail(patchDTO.getEmail());
+        }
+        if (patchDTO.getPerfil() != null) {
+            existente.setPerfil(patchDTO.getPerfil());
+        }
+        if (patchDTO.getAtivo() != null) {
+            existente.setAtivo(patchDTO.getAtivo());
+        }
+        if (patchDTO.getGoogleAccessToken() != null) {
+            existente.setGoogleAccessToken(patchDTO.getGoogleAccessToken());
+        }
+        if (patchDTO.getGoogleRefreshToken() != null) {
+            existente.setGoogleRefreshToken(patchDTO.getGoogleRefreshToken());
+        }
+        
+        // Se senha for enviada, criptografar
+        if (patchDTO.getSenha() != null && !patchDTO.getSenha().isEmpty()) {
+            existente.setSenha(passwordEncoder.encode(patchDTO.getSenha()));
+        }
+        
+        return profissionalRepository.save(existente);
+    }
 }

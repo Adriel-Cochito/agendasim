@@ -1,46 +1,69 @@
 package com.agendasim.service;
 
-import com.agendasim.dto.ServicoDTO;
+import com.agendasim.exception.IntegridadeReferencialException;
+import com.agendasim.exception.RecursoNaoEncontradoException;
 import com.agendasim.model.Servico;
+import com.agendasim.repository.ServicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ServicoServiceImpl implements ServicoService {
+public class ServicoService {
 
     @Autowired
-    private ServicoDTO servicoDTO;
+    private ServicoRepository servicoRepository;
 
-    @Override
     public List<Servico> listarTodos() {
-        return servicoDTO.listarTodos();
+        return servicoRepository.findAll();
     }
 
-    @Override
     public Servico criar(Servico servico) {
-        return servicoDTO.salvar(servico);
+        return servicoRepository.save(servico);
     }
 
-    @Override
     public Servico buscarPorId(Long id, Long empresaId) {
-        return servicoDTO.buscarPorId(id, empresaId);
+        return servicoRepository.findByIdAndEmpresaId(id, empresaId)
+                .orElseThrow(() -> new RecursoNaoEncontradoException(
+                        "Serviço id=" + id + " não encontrado para empresa id=" + empresaId));
     }
 
-
-    @Override
     public void excluir(Long id) {
-        servicoDTO.excluir(id);
+        if (!servicoRepository.existsById(id)) {
+            throw new RecursoNaoEncontradoException("Serviço com ID " + id + " não encontrado");
+        }
+        
+        try {
+            servicoRepository.deleteById(id);
+        } catch (DataIntegrityViolationException ex) {
+            throw new IntegridadeReferencialException(
+                "Não é possível excluir este serviço pois ele possui agendamentos associados", 
+                ex
+            );
+        }
     }
 
-    @Override
     public Servico atualizar(Long id, Servico servico) {
-        return servicoDTO.atualizar(id, servico);
+        Servico existente = servicoRepository.findById(id)
+            .orElseThrow(() -> new RecursoNaoEncontradoException("Serviço com ID " + id + " não encontrado"));
+
+        // Atualiza campos básicos
+        existente.setTitulo(servico.getTitulo());
+        existente.setDescricao(servico.getDescricao());
+        existente.setPreco(servico.getPreco());
+        existente.setAtivo(servico.getAtivo());
+        existente.setDuracao(servico.getDuracao());
+        existente.setEmpresaId(servico.getEmpresaId());
+
+        // Atualiza os profissionais associados
+        existente.setProfissionais(servico.getProfissionais());
+
+        return servicoRepository.save(existente);
     }
 
-    @Override
     public List<Servico> listarPorEmpresa(Long empresaId) {
-        return servicoDTO.listarPorEmpresa(empresaId);
+        return servicoRepository.findByEmpresaId(empresaId);
     }
 }

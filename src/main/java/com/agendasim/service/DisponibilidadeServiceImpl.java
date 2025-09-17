@@ -1,8 +1,8 @@
 package com.agendasim.service;
 
-import com.agendasim.dto.DisponibilidadeDTO;
 import com.agendasim.enums.TipoDisponibilidade;
 import com.agendasim.model.Disponibilidade;
+import com.agendasim.repository.DisponibilidadeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,12 +11,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class DisponibilidadeServiceImpl implements DisponibilidadeService {
+public class DisponibilidadeService {
 
     @Autowired
-    private DisponibilidadeDTO disponibilidadeDTO;
+    private DisponibilidadeRepository disponibilidadeRepository;
 
-    @Override
     @Transactional
     public Disponibilidade salvar(Disponibilidade disponibilidade) {
         switch (disponibilidade.getTipo()) {
@@ -35,10 +34,10 @@ public class DisponibilidadeServiceImpl implements DisponibilidadeService {
         }
 
         if (disponibilidade.getTipo() == TipoDisponibilidade.BLOQUEIO || disponibilidade.getTipo() == TipoDisponibilidade.BLOQUEIO_GRADE) {
-            return disponibilidadeDTO.salvar(disponibilidade);
+            return disponibilidadeRepository.save(disponibilidade);
         }
 
-        if (disponibilidadeDTO.existeConflito(disponibilidade)) {
+        if (existeConflito(disponibilidade)) {
             String mensagem = switch (disponibilidade.getTipo()) {
                 case GRADE -> "Conflito de horário com disponibilidade existente para os dias selecionados.";
                 case LIBERADO -> "Conflito de horário com disponibilidade existente.";
@@ -47,45 +46,66 @@ public class DisponibilidadeServiceImpl implements DisponibilidadeService {
             throw new RuntimeException(mensagem);
         }
 
-        return disponibilidadeDTO.salvar(disponibilidade);
+        return disponibilidadeRepository.save(disponibilidade);
     }
 
-    @Override
     @Transactional
     public Disponibilidade atualizar(Long id, Disponibilidade disponibilidade) {
         Disponibilidade atual = buscarPorId(id);
         disponibilidade.setId(atual.getId()); // Garante atualização
-        return disponibilidadeDTO.atualizar(disponibilidade);
+        return disponibilidadeRepository.save(disponibilidade);
     }
 
-    @Override
     public Disponibilidade buscarPorId(Long id) {
-        Disponibilidade d = disponibilidadeDTO.buscarPorId(id);
-        if (d == null)
-            throw new RuntimeException("Disponibilidade não encontrada");
-        return d;
+        return disponibilidadeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Disponibilidade não encontrada"));
     }
 
-    @Override
     @Transactional
     public void deletar(Long id) {
-        disponibilidadeDTO.deletar(id);
+        if (!disponibilidadeRepository.existsById(id)) {
+            throw new RuntimeException("Disponibilidade com ID " + id + " não encontrado");
+        }
+        disponibilidadeRepository.deleteById(id);
     }
 
-    @Override
     public List<Disponibilidade> listarPorEmpresa(Long empresaId) {
-        return disponibilidadeDTO.listarPorEmpresa(empresaId);
+        return disponibilidadeRepository.findByEmpresaIdAndProfissionalId(empresaId, null);
     }
 
-    @Override
     public List<Disponibilidade> listarPorEmpresaEProfissional(Long empresaId, Long profissionalId) {
-        return disponibilidadeDTO.listarPorEmpresaEProfissional(empresaId, profissionalId);
+        return disponibilidadeRepository.findByEmpresaIdAndProfissionalId(empresaId, profissionalId);
     }
 
-    @Override
     public List<Disponibilidade> listarPorEmpresaProfissionalEData(Long empresaId, Long profissionalId, LocalDate data) {
-        return disponibilidadeDTO.listarPorEmpresaProfissionalEData(empresaId, profissionalId, data);
+        int diaSemana = data.getDayOfWeek().getValue(); // 1=Seg, ..., 7=Dom
+        if (diaSemana == 7) diaSemana = 0; // H2 usa 0=Dom
+        
+        return disponibilidadeRepository.findByEmpresaProfissionalEData(empresaId, profissionalId, diaSemana, data);
     }
 
-
+    /**
+     * Verifica se existe conflito de disponibilidade
+     */
+    private boolean existeConflito(Disponibilidade disponibilidade) {
+        if (disponibilidade.getTipo().name().equals("GRADE") || disponibilidade.getTipo().name().equals("BLOQUEIO_GRADE")) {
+            // Para tipo GRADE e BLOQUEIO_GRADE, verificar conflito de dias da semana
+            Long count = disponibilidadeRepository.countConflitoDisponibilidadeGrade(
+                disponibilidade.getProfissional().getId(),
+                disponibilidade.getEmpresa().getId(),
+                disponibilidade.getId() != null ? disponibilidade.getId() : 0L
+            );
+            return count > 0;
+        } else {
+            // Para BLOQUEIO/LIBERADO, verificar sobreposição de intervalos
+            Long count = disponibilidadeRepository.countConflitoDisponibilidadeIntervalo(
+                disponibilidade.getProfissional().getId(),
+                disponibilidade.getEmpresa().getId(),
+                disponibilidade.getId() != null ? disponibilidade.getId() : 0L,
+                disponibilidade.getDataHoraInicio(),
+                disponibilidade.getDataHoraFim()
+            );
+            return count > 0;
+        }
+    }
 }
