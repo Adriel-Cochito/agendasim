@@ -1,6 +1,7 @@
 com\agendasim\dto\EmpresaDTO.class
 com\agendasim\enums\Perfil.class
 com\agendasim\dto\EmpresaDTOImpl.class
+com\agendasim\exception\EmailJaCadastradoException.class
 com\agendasim\exception\response\ApiError$ApiErrorBuilder.class
 com\agendasim\security\dto\JwtResponse$UserInfo.class
 com\agendasim\controller\AgendaController.class

@@ -1,4 +1,4 @@
-// GlobalExceptionHandler.java (atualizado)
+// GlobalExceptionHandler.java (atualizado com EmailJaCadastradoException)
 package com.agendasim.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +21,35 @@ import java.util.UUID;
 public class GlobalExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    /**
+     * NOVO: Trata especificamente a exception de email já cadastrado
+     */
+    @ExceptionHandler(EmailJaCadastradoException.class)
+    public ResponseEntity<ErrorResponse> handleEmailJaCadastrado(
+            EmailJaCadastradoException ex, 
+            HttpServletRequest request) {
+        
+        String traceId = UUID.randomUUID().toString().substring(0, 8);
+        
+        logger.warn("Email já cadastrado - TraceId: {} - Email: {}", traceId, ex.getEmail());
+        
+        ErrorResponse errorResponse = new ErrorResponse(
+            false,
+            new ErrorDetails(
+                LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                HttpStatus.CONFLICT.value(),
+                "Email já cadastrado",
+                ex.getMessage(),
+                request.getRequestURI(),
+                request.getMethod(),
+                traceId,
+                new ErrorDetailsInfo("EMAIL_ALREADY_EXISTS", "Tente usar um email diferente ou faça login se já possui conta")
+            )
+        );
+        
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorResponse> handleConstraintViolationException(

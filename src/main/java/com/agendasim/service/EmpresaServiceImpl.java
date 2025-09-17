@@ -3,13 +3,17 @@ package com.agendasim.service;
 import com.agendasim.dto.EmpresaDTO;
 import com.agendasim.dto.CriarEmpresaComOwnerDTO;
 import com.agendasim.dto.EmpresaComOwnerResponseDTO;
+import com.agendasim.exception.EmailJaCadastradoException;
 import com.agendasim.model.Empresa;
 import com.agendasim.model.Profissional;
+import com.agendasim.repository.ProfissionalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmpresaServiceImpl implements EmpresaService {
@@ -19,6 +23,9 @@ public class EmpresaServiceImpl implements EmpresaService {
 
     @Autowired
     private ProfissionalService profissionalService;
+
+    @Autowired
+    private ProfissionalRepository profissionalRepository;
 
     @Override
     public List<Empresa> listarTodas() {
@@ -33,7 +40,12 @@ public class EmpresaServiceImpl implements EmpresaService {
     @Override
     @Transactional
     public EmpresaComOwnerResponseDTO criarEmpresaComOwner(CriarEmpresaComOwnerDTO dto) {
-        // 1. Criar a empresa primeiro
+        
+        // 1. VALIDAÇÃO PRÉVIA: Verificar se o email do profissional já existe
+        // Esta verificação acontece ANTES de criar a empresa
+        validarEmailUnico(dto.getEmailProfissional());
+
+        // 2. Criar a empresa (somente após validação do email)
         Empresa empresa = new Empresa();
         empresa.setNome(dto.getNomeEmpresa());
         empresa.setEmail(dto.getEmailEmpresa());
@@ -43,7 +55,7 @@ public class EmpresaServiceImpl implements EmpresaService {
 
         Empresa empresaCriada = empresaDTO.salvar(empresa);
 
-        // 2. Criar o profissional owner usando o ID da empresa criada
+        // 3. Criar o profissional owner usando o ID da empresa criada
         Profissional profissional = new Profissional();
         profissional.setNome(dto.getNomeProfissional());
         profissional.setEmail(dto.getEmailProfissional());
@@ -51,12 +63,30 @@ public class EmpresaServiceImpl implements EmpresaService {
         profissional.setPerfil(dto.getPerfilProfissional());
         profissional.setGoogleAccessToken(dto.getGoogleAccessToken());
         profissional.setGoogleRefreshToken(dto.getGoogleRefreshToken());
-        profissional.setEmpresaId(empresaCriada.getId()); // Usa o ID da empresa criada
+        profissional.setEmpresaId(empresaCriada.getId());
         profissional.setAtivo(dto.getAtivoProfissional());
 
-        Profissional profissionalCriado = profissionalService.salvar(profissional);
+        try {
+            Profissional profissionalCriado = profissionalService.salvar(profissional);
+            return new EmpresaComOwnerResponseDTO(empresaCriada, profissionalCriado);
+        } catch (DataIntegrityViolationException ex) {
+            // Como já validamos antes, isso não deveria acontecer
+            // Mas mantemos como segurança adicional
+            throw new EmailJaCadastradoException(dto.getEmailProfissional(), 
+                "Erro de concorrência: Email foi cadastrado por outro processo");
+        }
+    }
 
-        return new EmpresaComOwnerResponseDTO(empresaCriada, profissionalCriado);
+    /**
+     * Valida se o email não está em uso por outro profissional
+     * @param email Email a ser validado
+     * @throws EmailJaCadastradoException se o email já estiver em uso
+     */
+    private void validarEmailUnico(String email) {
+        Optional<Profissional> profissionalExistente = profissionalRepository.findByEmail(email);
+        if (profissionalExistente.isPresent()) {
+            throw new EmailJaCadastradoException(email);
+        }
     }
 
     @Override

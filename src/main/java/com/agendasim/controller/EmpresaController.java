@@ -29,6 +29,7 @@ public class EmpresaController {
 
     @PostMapping("/com-owner")
     public EmpresaComOwnerResponseDTO criarComOwner(@Valid @RequestBody CriarEmpresaComOwnerDTO dto) {
+        // O GlobalExceptionHandler vai capturar automaticamente a EmailJaCadastradoException
         return empresaService.criarEmpresaComOwner(dto);
     }
 
