@@ -26,7 +26,7 @@ public interface DisponibilidadeRepository extends JpaRepository<Disponibilidade
 
     // Queries de conflito de bloqueio
     @Query("SELECT COUNT(d) FROM Disponibilidade d WHERE d.empresa.id = :empresaId AND d.profissional.id = :profissionalId AND d.tipo IN ('BLOQUEIO', 'BLOQUEIO_GRADE')")
-    Long countConflitoBloqueio(@Param("empresaId") Long empresaId, @Param("profissionalId") Long profissionalId, @Param("diaSemana") Integer diaSemana, @Param("data") LocalDate data);
+    Long countConflitoBloqueio(@Param("empresaId") Long empresaId, @Param("profissionalId") Long profissionalId);
 
     // Query para listar disponibilidades por empresa, profissional e data
     @Query("SELECT d FROM Disponibilidade d WHERE d.empresa.id = :empresaId AND d.profissional.id = :profissionalId")

@@ -136,9 +136,7 @@ public class AgendaService {
         
         Long countBloqueio = disponibilidadeRepository.countConflitoBloqueio(
             agenda.getEmpresa().getId(),
-            agenda.getProfissional().getId(),
-            diaSemana,
-            data
+            agenda.getProfissional().getId()
         );
         
         return countBloqueio > 0;
