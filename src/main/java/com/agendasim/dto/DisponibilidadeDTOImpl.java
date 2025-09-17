@@ -60,7 +60,7 @@ public class DisponibilidadeDTOImpl implements DisponibilidadeDTO {
             WHERE d.empresa.id = :empresaId
             AND d.profissional.id = :profissionalId
             AND (
-                (d.tipo = 'GRADE' AND :diaSemana MEMBER OF d.diasSemana)
+                (d.tipo IN ('GRADE', 'BLOQUEIO_GRADE') AND :diaSemana MEMBER OF d.diasSemana)
                 OR
                 (d.tipo IN ('BLOQUEIO', 'LIBERADO') 
                  AND CAST(d.dataHoraInicio AS date) <= :data 
@@ -89,8 +89,8 @@ public class DisponibilidadeDTOImpl implements DisponibilidadeDTO {
         // CORREÇÃO: Melhorar a verificação de conflito para considerar intervalos sobrepostos
         String jpql;
         
-        if (disponibilidade.getTipo().name().equals("GRADE")) {
-            // Para tipo GRADE, verificar conflito de dias da semana
+        if (disponibilidade.getTipo().name().equals("GRADE") || disponibilidade.getTipo().name().equals("BLOQUEIO_GRADE")) {
+            // Para tipo GRADE e BLOQUEIO_GRADE, verificar conflito de dias da semana
             jpql = "SELECT COUNT(d) FROM Disponibilidade d " +
                    "WHERE d.profissional.id = :profissionalId " +
                    "AND d.empresa.id = :empresaId " +

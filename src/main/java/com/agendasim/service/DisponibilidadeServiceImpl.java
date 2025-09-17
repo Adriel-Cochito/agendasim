@@ -21,6 +21,7 @@ public class DisponibilidadeServiceImpl implements DisponibilidadeService {
     public Disponibilidade salvar(Disponibilidade disponibilidade) {
         switch (disponibilidade.getTipo()) {
             case GRADE:
+            case BLOQUEIO_GRADE:
                 disponibilidade.setDataHoraInicio(null);
                 disponibilidade.setDataHoraFim(null);
                 break;
@@ -33,12 +34,17 @@ public class DisponibilidadeServiceImpl implements DisponibilidadeService {
                 break;
         }
 
-        if (disponibilidade.getTipo() == TipoDisponibilidade.BLOQUEIO) {
+        if (disponibilidade.getTipo() == TipoDisponibilidade.BLOQUEIO || disponibilidade.getTipo() == TipoDisponibilidade.BLOQUEIO_GRADE) {
             return disponibilidadeDTO.salvar(disponibilidade);
         }
 
         if (disponibilidadeDTO.existeConflito(disponibilidade)) {
-            throw new RuntimeException("Conflito de horário com um bloqueio existente.");
+            String mensagem = switch (disponibilidade.getTipo()) {
+                case GRADE -> "Conflito de horário com disponibilidade existente para os dias selecionados.";
+                case LIBERADO -> "Conflito de horário com disponibilidade existente.";
+                default -> "Conflito de horário com um bloqueio existente.";
+            };
+            throw new RuntimeException(mensagem);
         }
 
         return disponibilidadeDTO.salvar(disponibilidade);

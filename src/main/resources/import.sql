@@ -35,3 +35,11 @@ INSERT INTO disponibilidades (tipo, data_hora_inicio, data_hora_fim, profissiona
 
 -- DISPONIBILIDADE - LIBERADO
 INSERT INTO disponibilidades (tipo, data_hora_inicio, data_hora_fim, profissional_id, empresa_id, observacao, created_at) VALUES ('LIBERADO', '2025-06-23 08:00:00', '2025-06-23 10:00:00', 1, 1, 'Horário extra liberado', NOW());
+
+-- DISPONIBILIDADE - BLOQUEIO_GRADE
+INSERT INTO disponibilidades (tipo, hora_inicio, hora_fim, profissional_id, empresa_id, observacao, created_at) VALUES ('BLOQUEIO_GRADE', '12:00:00', '13:00:00', 1, 1, 'Horário de almoço fixo', NOW());
+INSERT INTO disponibilidades (tipo, hora_inicio, hora_fim, profissional_id, empresa_id, observacao, created_at) VALUES ('BLOQUEIO_GRADE', '12:00:00', '13:00:00', 2, 1, 'Horário de almoço fixo', NOW());
+
+-- BLOQUEIO_GRADE - diasSemana (segunda a sexta: 1-5)
+INSERT INTO disponibilidade_dias_semana (disponibilidade_id, dia_semana) VALUES (4, 1), (4, 2), (4, 3), (4, 4), (4, 5);
+INSERT INTO disponibilidade_dias_semana (disponibilidade_id, dia_semana) VALUES (5, 1), (5, 2), (5, 3), (5, 4), (5, 5);
