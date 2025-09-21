@@ -12,6 +12,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface DisponibilidadeRepository extends JpaRepository<Disponibilidade, Long> {
+    List<Disponibilidade> findByEmpresaId(Long empresaId);
+    
     List<Disponibilidade> findByEmpresaIdAndProfissionalId(Long empresaId, Long profissionalId);
 
     List<Disponibilidade> findByTipoAndEmpresaIdAndProfissionalId(TipoDisponibilidade tipo, Long empresaId,

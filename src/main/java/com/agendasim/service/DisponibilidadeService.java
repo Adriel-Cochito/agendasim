@@ -70,7 +70,7 @@ public class DisponibilidadeService {
     }
 
     public List<Disponibilidade> listarPorEmpresa(Long empresaId) {
-        return disponibilidadeRepository.findByEmpresaIdAndProfissionalId(empresaId, null);
+        return disponibilidadeRepository.findByEmpresaId(empresaId);
     }
 
     public List<Disponibilidade> listarPorEmpresaEProfissional(Long empresaId, Long profissionalId) {
