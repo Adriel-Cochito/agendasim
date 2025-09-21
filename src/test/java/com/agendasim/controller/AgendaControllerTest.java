@@ -3,6 +3,7 @@ package com.agendasim.controller;
 import com.agendasim.dto.AgendaAdminDTO;
 import com.agendasim.dto.AgendaClienteDTO;
 import com.agendasim.exception.ConflitoAgendamentoException;
+import com.agendasim.exception.GlobalExceptionHandler;
 import com.agendasim.exception.RecursoNaoEncontradoException;
 import com.agendasim.model.Agenda;
 import com.agendasim.model.Empresa;
@@ -10,6 +11,7 @@ import com.agendasim.model.Profissional;
 import com.agendasim.model.Servico;
 import com.agendasim.service.AgendaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -49,8 +52,14 @@ class AgendaControllerTest {
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(agendaController).build();
         objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(agendaController)
+                .setControllerAdvice(new GlobalExceptionHandler())
+                .setMessageConverters(new MappingJackson2HttpMessageConverter(objectMapper))
+                .build();
 
         // Setup empresa
         empresa = new Empresa();
@@ -73,7 +82,7 @@ class AgendaControllerTest {
         agenda = new Agenda();
         agenda.setId(1L);
         agenda.setNomeCliente("Cliente Teste");
-        agenda.setTelefoneCliente("11999999999");
+        agenda.setTelefoneCliente("+55 31 99999-8888");
         agenda.setDataHora(Instant.now().plusSeconds(3600));
         agenda.setStatus("AGENDADO");
         agenda.setEmpresa(empresa);
@@ -127,7 +136,7 @@ class AgendaControllerTest {
                         .param("empresaId", "1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(agenda)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isConflict());
 
         verify(agendaService).criar(any(Agenda.class), eq(1L));
     }

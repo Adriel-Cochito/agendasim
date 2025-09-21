@@ -227,6 +227,32 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    @ExceptionHandler(RecursoNaoEncontradoException.class)
+    public ResponseEntity<ErrorResponse> handleRecursoNaoEncontrado(
+            RecursoNaoEncontradoException ex, 
+            HttpServletRequest request) {
+        
+        String traceId = UUID.randomUUID().toString().substring(0, 8);
+        
+        logger.warn("Recurso não encontrado - TraceId: {} - Message: {}", traceId, ex.getMessage());
+        
+        ErrorResponse errorResponse = new ErrorResponse(
+            false,
+            new ErrorDetails(
+                LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                HttpStatus.NOT_FOUND.value(),
+                "Recurso não encontrado",
+                ex.getMessage(),
+                request.getRequestURI(),
+                request.getMethod(),
+                traceId,
+                new ErrorDetailsInfo("RESOURCE_NOT_FOUND", "O recurso solicitado não foi encontrado")
+            )
+        );
+        
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(
             Exception ex, 

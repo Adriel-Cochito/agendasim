@@ -3,17 +3,22 @@ package com.agendasim.controller;
 import com.agendasim.dto.CriarEmpresaComOwnerDTO;
 import com.agendasim.dto.EmpresaComOwnerResponseDTO;
 import com.agendasim.enums.Perfil;
+import com.agendasim.exception.GlobalExceptionHandler;
 import com.agendasim.model.Empresa;
 import com.agendasim.model.Profissional;
 import com.agendasim.service.EmpresaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,16 +29,16 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(EmpresaController.class)
+@ExtendWith(MockitoExtension.class)
 class EmpresaControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
+    @Mock
     private EmpresaService empresaService;
 
-    @Autowired
+    @InjectMocks
+    private EmpresaController empresaController;
+
+    private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
     private Empresa empresa;
@@ -42,6 +47,15 @@ class EmpresaControllerTest {
 
     @BeforeEach
     void setUp() {
+        objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(empresaController)
+                .setControllerAdvice(new GlobalExceptionHandler())
+                .setMessageConverters(new MappingJackson2HttpMessageConverter(objectMapper))
+                .build();
+        
         // Setup empresa
         empresa = new Empresa();
         empresa.setId(1L);

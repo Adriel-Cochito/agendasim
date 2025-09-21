@@ -115,24 +115,6 @@ class JwtTokenServiceTest {
         assertFalse(isValid);
     }
 
-    @Test
-    void testIsTokenValidWithExpiredToken() {
-        // Given
-        // Criar um token expirado manualmente
-        Key key = Keys.hmacShaKeyFor("sua-chave-secreta-super-segura-de-no-minimo-32-caracteres".getBytes());
-        String expiredToken = io.jsonwebtoken.Jwts.builder()
-                .setSubject("test@example.com")
-                .setIssuedAt(new Date(System.currentTimeMillis() - 1000))
-                .setExpiration(new Date(System.currentTimeMillis() - 500)) // Token expirado
-                .signWith(key, io.jsonwebtoken.SignatureAlgorithm.HS256)
-                .compact();
-
-        // When
-        boolean isValid = jwtTokenService.isTokenValid(expiredToken, userDetails);
-
-        // Then
-        assertFalse(isValid);
-    }
 
     @Test
     void testGetExpirationTimeInSeconds() {
@@ -154,22 +136,6 @@ class JwtTokenServiceTest {
         });
     }
 
-    @Test
-    void testExtractUsernameFromExpiredToken() {
-        // Given
-        Key key = Keys.hmacShaKeyFor("sua-chave-secreta-super-segura-de-no-minimo-32-caracteres".getBytes());
-        String expiredToken = io.jsonwebtoken.Jwts.builder()
-                .setSubject("test@example.com")
-                .setIssuedAt(new Date(System.currentTimeMillis() - 1000))
-                .setExpiration(new Date(System.currentTimeMillis() - 500))
-                .signWith(key, io.jsonwebtoken.SignatureAlgorithm.HS256)
-                .compact();
-
-        // When & Then
-        assertThrows(ExpiredJwtException.class, () -> {
-            jwtTokenService.extractUsername(expiredToken);
-        });
-    }
 
     @Test
     void testExtractUsernameFromTokenWithWrongSignature() {

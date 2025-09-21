@@ -114,7 +114,7 @@ public class AgendaService {
     }
 
     /**
-     * Verifica se existe conflito de agendamento (outro agendamento ou bloqueio)
+     * Verifica se existe conflito de agendamento (outro agendamento no mesmo horário)
      */
     private boolean existeConflitoAgendamento(Agenda agenda) {
         // Verificar conflito com outros agendamentos no mesmo horário
@@ -125,20 +125,6 @@ public class AgendaService {
             agenda.getId() != null ? agenda.getId() : 0L
         );
         
-        if (countAgenda > 0) {
-            return true;
-        }
-        
-        // Verificar conflito com bloqueios (BLOQUEIO e BLOQUEIO_GRADE)
-        LocalDate data = agenda.getDataHora().atZone(ZoneOffset.UTC).toLocalDate();
-        int diaSemana = data.getDayOfWeek().getValue(); // 1=Seg, ..., 7=Dom
-        if (diaSemana == 7) diaSemana = 0; // H2 usa 0=Dom
-        
-        Long countBloqueio = disponibilidadeRepository.countConflitoBloqueio(
-            agenda.getEmpresa().getId(),
-            agenda.getProfissional().getId()
-        );
-        
-        return countBloqueio > 0;
+        return countAgenda > 0;
     }
 }

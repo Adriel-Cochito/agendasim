@@ -24,7 +24,6 @@ public class Agenda {
     private String nomeCliente;
 
     @NotBlank(message = "O telefone do cliente é obrigatório")
-    @Pattern(regexp = "^\\+55\\s\\d{2}\\s9\\d{4}-\\d{4}$", message = "O telefone deve estar no formato +55 31 99999-8888")
     private String telefoneCliente;
 
     @NotNull(message = "A empresa é obrigatória")

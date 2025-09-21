@@ -95,8 +95,6 @@ class AgendaServiceTest {
         // Given
         when(agendaRepository.countConflitoAgendamento(anyLong(), anyLong(), any(Instant.class), anyLong()))
                 .thenReturn(0L);
-        when(disponibilidadeRepository.countConflitoBloqueio(anyLong(), anyLong()))
-                .thenReturn(0L);
         when(agendaRepository.save(any(Agenda.class))).thenReturn(agenda);
 
         // When
@@ -194,8 +192,6 @@ class AgendaServiceTest {
 
         when(agendaRepository.findById(1L)).thenReturn(Optional.of(agenda));
         when(agendaRepository.countConflitoAgendamento(anyLong(), anyLong(), any(Instant.class), anyLong()))
-                .thenReturn(0L);
-        when(disponibilidadeRepository.countConflitoBloqueio(anyLong(), anyLong()))
                 .thenReturn(0L);
         when(agendaRepository.save(any(Agenda.class))).thenReturn(agenda);
 

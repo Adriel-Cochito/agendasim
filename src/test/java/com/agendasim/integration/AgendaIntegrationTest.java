@@ -42,7 +42,10 @@ class AgendaIntegrationTest {
         // Setup empresa
         empresa = new Empresa();
         empresa.setNome("Empresa Teste");
-        empresa.setCnpj("12345678000199");
+        empresa.setEmail("empresa@teste.com");
+        empresa.setTelefone("+55 31 99999-8888");
+        empresa.setCnpj("12.345.678/0001-90");
+        empresa.setAtivo(true);
         empresa = entityManager.persistAndFlush(empresa);
 
         // Setup profissional
@@ -56,8 +59,11 @@ class AgendaIntegrationTest {
         // Setup serviço
         servico = new Servico();
         servico.setTitulo("Serviço Teste");
+        servico.setDescricao("Descrição do serviço");
+        servico.setPreco(100.0);
         servico.setDuracao(60);
         servico.setEmpresaId(empresa.getId());
+        servico.setAtivo(true);
         servico = entityManager.persistAndFlush(servico);
     }
 
@@ -66,7 +72,7 @@ class AgendaIntegrationTest {
         // Given
         Agenda agenda = new Agenda();
         agenda.setNomeCliente("Cliente Teste");
-        agenda.setTelefoneCliente("11999999999");
+        agenda.setTelefoneCliente("+55 31 99999-8888");
         agenda.setDataHora(Instant.now().plusSeconds(3600));
         agenda.setStatus("AGENDADO");
         agenda.setEmpresa(empresa);
@@ -89,7 +95,7 @@ class AgendaIntegrationTest {
         // Given
         Agenda agenda = new Agenda();
         agenda.setNomeCliente("Cliente Teste");
-        agenda.setTelefoneCliente("11999999999");
+        agenda.setTelefoneCliente("+55 31 99999-8888");
         agenda.setDataHora(Instant.now().plusSeconds(3600));
         agenda.setStatus("AGENDADO");
         agenda.setEmpresa(empresa);
@@ -121,7 +127,7 @@ class AgendaIntegrationTest {
 
         Agenda agenda2 = new Agenda();
         agenda2.setNomeCliente("Cliente 2");
-        agenda2.setTelefoneCliente("11888888888");
+        agenda2.setTelefoneCliente("+55 31 88888-8888");
         agenda2.setDataHora(Instant.now().plusSeconds(7200));
         agenda2.setStatus("AGENDADO");
         agenda2.setEmpresa(empresa);
@@ -165,7 +171,7 @@ class AgendaIntegrationTest {
         // Given
         Agenda agenda = new Agenda();
         agenda.setNomeCliente("Cliente Original");
-        agenda.setTelefoneCliente("11999999999");
+        agenda.setTelefoneCliente("+55 31 99999-8888");
         agenda.setDataHora(Instant.now().plusSeconds(3600));
         agenda.setStatus("AGENDADO");
         agenda.setEmpresa(empresa);
@@ -188,7 +194,7 @@ class AgendaIntegrationTest {
         // Given
         Agenda agenda = new Agenda();
         agenda.setNomeCliente("Cliente Teste");
-        agenda.setTelefoneCliente("11999999999");
+        agenda.setTelefoneCliente("+55 31 99999-8888");
         agenda.setDataHora(Instant.now().plusSeconds(3600));
         agenda.setStatus("AGENDADO");
         agenda.setEmpresa(empresa);
