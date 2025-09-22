@@ -1,4 +1,4 @@
-// GlobalExceptionHandler.java (atualizado)
+// GlobalExceptionHandler.java (atualizado com EmailJaCadastradoException)
 package com.agendasim.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +21,64 @@ import java.util.UUID;
 public class GlobalExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    /**
+     * NOVO: Trata especificamente a exception de email já cadastrado
+     */
+    @ExceptionHandler(EmailJaCadastradoException.class)
+    public ResponseEntity<ErrorResponse> handleEmailJaCadastrado(
+            EmailJaCadastradoException ex, 
+            HttpServletRequest request) {
+        
+        String traceId = UUID.randomUUID().toString().substring(0, 8);
+        
+        logger.warn("Email já cadastrado - TraceId: {} - Email: {}", traceId, ex.getEmail());
+        
+        ErrorResponse errorResponse = new ErrorResponse(
+            false,
+            new ErrorDetails(
+                LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                HttpStatus.CONFLICT.value(),
+                "Email já cadastrado",
+                ex.getMessage(),
+                request.getRequestURI(),
+                request.getMethod(),
+                traceId,
+                new ErrorDetailsInfo("EMAIL_ALREADY_EXISTS", "Tente usar um email diferente ou faça login se já possui conta")
+            )
+        );
+        
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
+    /**
+     * NOVO: Trata especificamente a exception de conflito de agendamento
+     */
+    @ExceptionHandler(ConflitoAgendamentoException.class)
+    public ResponseEntity<ErrorResponse> handleConflitoAgendamento(
+            ConflitoAgendamentoException ex, 
+            HttpServletRequest request) {
+        
+        String traceId = UUID.randomUUID().toString().substring(0, 8);
+        
+        logger.warn("Conflito de agendamento - TraceId: {} - Message: {}", traceId, ex.getMessage());
+        
+        ErrorResponse errorResponse = new ErrorResponse(
+            false,
+            new ErrorDetails(
+                LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                HttpStatus.CONFLICT.value(),
+                "Conflito de Agendamento",
+                ex.getMessage(),
+                request.getRequestURI(),
+                request.getMethod(),
+                traceId,
+                new ErrorDetailsInfo("SCHEDULING_CONFLICT", "Escolha outro horário ou profissional para o agendamento")
+            )
+        );
+        
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorResponse> handleConstraintViolationException(
@@ -167,6 +225,32 @@ public class GlobalExceptionHandler {
         );
         
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(RecursoNaoEncontradoException.class)
+    public ResponseEntity<ErrorResponse> handleRecursoNaoEncontrado(
+            RecursoNaoEncontradoException ex, 
+            HttpServletRequest request) {
+        
+        String traceId = UUID.randomUUID().toString().substring(0, 8);
+        
+        logger.warn("Recurso não encontrado - TraceId: {} - Message: {}", traceId, ex.getMessage());
+        
+        ErrorResponse errorResponse = new ErrorResponse(
+            false,
+            new ErrorDetails(
+                LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                HttpStatus.NOT_FOUND.value(),
+                "Recurso não encontrado",
+                ex.getMessage(),
+                request.getRequestURI(),
+                request.getMethod(),
+                traceId,
+                new ErrorDetailsInfo("RESOURCE_NOT_FOUND", "O recurso solicitado não foi encontrado")
+            )
+        );
+        
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
     @ExceptionHandler(Exception.class)

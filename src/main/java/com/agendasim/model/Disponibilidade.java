@@ -29,14 +29,14 @@ public class Disponibilidade {
     private LocalDateTime dataHoraInicio;
     private LocalDateTime dataHoraFim;
 
-    // Para GRADE
+    // Para GRADE e BLOQUEIO_GRADE
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "disponibilidade_dias_semana", joinColumns = @JoinColumn(name = "disponibilidade_id"))
     @Column(name = "dia_semana")
     private List<Integer> diasSemana; // 0=Dom, 1=Seg, ..., 6=Sáb
 
-    private LocalTime horaInicio; // apenas para GRADE
-    private LocalTime horaFim; // apenas para GRADE
+    private LocalTime horaInicio; // apenas para GRADE e BLOQUEIO_GRADE
+    private LocalTime horaFim; // apenas para GRADE e BLOQUEIO_GRADE
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "profissional_id")
@@ -54,9 +54,9 @@ public class Disponibilidade {
     // Validações condicionais
     // ============================
 
-    @AssertTrue(message = "Para GRADE, deve informar diasSemana, horaInicio e horaFim, e deixar dataHoraInicio/Fim nulos")
+    @AssertTrue(message = "Para GRADE e BLOQUEIO_GRADE, deve informar diasSemana, horaInicio e horaFim, e deixar dataHoraInicio/Fim nulos")
     public boolean isGradeValida() {
-        if (tipo != TipoDisponibilidade.GRADE)
+        if (tipo != TipoDisponibilidade.GRADE && tipo != TipoDisponibilidade.BLOQUEIO_GRADE)
             return true;
 
         // Se diasSemana estiver null aqui, assume que ainda está sendo populado e não
@@ -67,6 +67,7 @@ public class Disponibilidade {
         return !diasSemana.isEmpty()
                 && horaInicio != null
                 && horaFim != null
+                && horaInicio.isBefore(horaFim)
                 && dataHoraInicio == null
                 && dataHoraFim == null;
     }
