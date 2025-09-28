@@ -24,11 +24,11 @@ public class AceiteEstatico {
     private Long usuarioId;
 
     @NotBlank(message = "O tipo de documento é obrigatório")
-    @Column(nullable = false)
-    private String tipoDocumento; // "TERMO" ou "POLITICA"
+    @Column(name = "tipo_documento", nullable = false, length = 50)
+    private String tipoDocumento; // Ex: TERMO, POLITICA
 
-    @NotBlank(message = "A versão é obrigatória")
-    @Column(nullable = false)
+    @NotBlank(message = "A versão do documento é obrigatória")
+    @Column(nullable = false, length = 20)
     private String versao;
 
     @NotNull(message = "O status de aceite é obrigatório")
