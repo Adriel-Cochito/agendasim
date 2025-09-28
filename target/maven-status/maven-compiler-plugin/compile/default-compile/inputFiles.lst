@@ -1,60 +1,82 @@
-C:\Projetos\agendasim\src\main\java\com\agendasim\exception\EmailJaCadastradoException.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\dto\dashboard\GraficosDTO.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\dto\dashboard\ServicoRankingDTO.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\controller\DisponibilidadeController.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\AgendasimApplication.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\repository\EmpresaRepository.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\controller\AgendamentoController.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\dto\dashboard\IndicadoresGestaoDTO.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\model\Servico.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\dto\AgendaAdminDTO.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\security\dto\JwtResponse.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\dto\EmpresaComOwnerResponseDTO.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\dto\ProfissionalPatchDTO.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\controller\DashboardController.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\repository\ServicoRepository.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\dto\dashboard\DashboardResumoDTO.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\enums\Perfil.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\service\ServicoService.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\mapper\AgendaMapper.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\dto\CriarEmpresaComOwnerDTO.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\exception\BusinessException.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\repository\DisponibilidadeRepository.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\security\ProfissionalUserDetailsService.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\controller\ServicoController.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\SwaggerConfig.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\exception\AccessDeniedException.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\dto\dashboard\AlertasDTO.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\dto\LoginRequest.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\dto\dashboard\AgendamentoPorDiaDTO.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\service\AgendaService.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\dto\dashboard\AgendamentosHojeDTO.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\exception\response\ApiResponse.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\exception\ConflitoAgendamentoException.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\dto\dashboard\MetricasPrincipaisDTO.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\enums\TipoDisponibilidade.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\exception\IntegridadeReferencialException.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\controller\AuthController.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\exception\RecursoNaoEncontradoException.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\service\EmpresaService.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\security\WebConfig.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\exception\GlobalExceptionHandler.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\controller\ProfissionalController.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\exception\response\ApiError.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\model\Empresa.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\dto\dashboard\ProfissionalSemAgendaDTO.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\model\Disponibilidade.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\repository\AgendaRepository.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\service\DisponibilidadeService.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\model\Profissional.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\security\SecurityConfig.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\service\DashboardService.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\security\JwtTokenService.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\controller\AgendaController.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\controller\EmpresaController.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\repository\ProfissionalRepository.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\dto\dashboard\ProfissionalRankingDTO.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\service\ProfissionalService.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\dto\AgendaClienteDTO.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\security\JwtAuthFilter.java
-C:\Projetos\agendasim\src\main\java\com\agendasim\model\Agenda.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\dto\lgpd\LogAuditoriaDTO.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\mapper\AgendaMapper.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\dto\CriarEmpresaComOwnerDTO.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\exception\BusinessException.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\controller\ClienteLGPDController.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\dto\lgpd\AceitePoliticaDTO.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\exception\RecursoNaoEncontradoException.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\dto\EmpresaComOwnerResponseDTO.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\controller\ServicoController.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\repository\AceiteEstaticoRepository.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\security\dto\JwtResponse.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\service\TermosService.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\repository\AgendaRepository.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\model\Servico.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\AgendasimApplication.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\repository\LogAuditoriaRepository.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\model\AceiteEstatico.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\service\AuditoriaService.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\model\Profissional.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\controller\EmpresaController.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\service\ConsentimentoService.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\repository\DisponibilidadeRepository.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\dto\dashboard\ProfissionalSemAgendaDTO.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\dto\ProfissionalPatchDTO.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\dto\dashboard\DashboardResumoDTO.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\service\PoliticaPrivacidadeService.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\dto\AgendaClienteDTO.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\service\DisponibilidadeService.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\model\Disponibilidade.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\controller\AuditoriaController.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\exception\IntegridadeReferencialException.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\model\Empresa.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\security\SecurityConfig.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\service\DashboardService.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\dto\dashboard\MetricasPrincipaisDTO.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\SwaggerConfig.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\controller\AgendamentoController.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\repository\ProfissionalRepository.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\security\JwtTokenService.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\security\WebConfig.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\dto\dashboard\GraficosDTO.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\exception\AccessDeniedException.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\security\JwtAuthFilter.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\dto\dashboard\AgendamentoPorDiaDTO.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\model\Consentimento.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\exception\GlobalExceptionHandler.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\dto\dashboard\AgendamentosHojeDTO.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\enums\Perfil.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\dto\lgpd\AceiteTermoDTO.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\repository\ConsentimentoRepository.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\dto\AgendaAdminDTO.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\model\LogAuditoria.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\dto\dashboard\ProfissionalRankingDTO.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\exception\EmailJaCadastradoException.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\repository\EmpresaRepository.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\controller\ProfissionalController.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\enums\TipoDisponibilidade.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\controller\DisponibilidadeController.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\controller\TermosController.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\service\ProfissionalService.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\controller\AgendaController.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\controller\PoliticaPrivacidadeController.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\service\EmpresaService.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\repository\ServicoRepository.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\service\LGPDService.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\controller\AuthController.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\dto\lgpd\ConsentimentoDTO.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\controller\DashboardController.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\security\ProfissionalUserDetailsService.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\exception\ConflitoAgendamentoException.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\exception\response\ApiResponse.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\model\Agenda.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\dto\dashboard\IndicadoresGestaoDTO.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\dto\dashboard\ServicoRankingDTO.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\service\ServicoService.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\exception\response\ApiError.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\dto\LoginRequest.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\controller\ConsentimentoPublicController.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\controller\ConsentimentoController.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\dto\lgpd\DadosPessoaisDTO.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\dto\dashboard\AlertasDTO.java
+C:\Projetos\Agendamento Plataforma\agendasim-api\src\main\java\com\agendasim\service\AgendaService.java

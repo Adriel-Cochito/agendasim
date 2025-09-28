@@ -1,7 +1,12 @@
 com\agendasim\controller\AgendaControllerTest.class
 com\agendasim\integration\AgendaIntegrationTest.class
 com\agendasim\security\JwtTokenServiceTest.class
+com\agendasim\service\AgendaServiceTest.class
 com\agendasim\config\TestContainersConfig.class
+com\agendasim\controller\EmpresaControllerTest.class
+com\agendasim\service\EmpresaServiceTest.class
 com\agendasim\integration\AgendaServiceIntegrationTest.class
+com\agendasim\service\ServicoServiceTest.class
 com\agendasim\AgendasimApplicationTests.class
+com\agendasim\controller\ServicoControllerTest.class
 com\agendasim\service\ProfissionalServiceTest.class
