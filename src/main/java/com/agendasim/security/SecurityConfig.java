@@ -173,6 +173,12 @@ public class SecurityConfig {
                                                 .hasAnyRole("OWNER", "ADMIN", "USER")
                                                 .requestMatchers("/api/politicas/**")
                                                 .hasAnyRole("OWNER", "ADMIN", "USER")
+                                                
+                                                // SUPORTE - endpoints públicos e autenticados
+                                                .requestMatchers("/api/suporte/publico/**")
+                                                .permitAll()
+                                                .requestMatchers("/api/suporte/**")
+                                                .hasAnyRole("OWNER", "ADMIN", "USER")
 
                                                 // Qualquer outra requisição exige autenticação
                                                 .anyRequest().authenticated())
