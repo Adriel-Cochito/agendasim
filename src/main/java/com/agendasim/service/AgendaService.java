@@ -73,6 +73,7 @@ public class AgendaService {
         existente.setServico(agenda.getServico());
         existente.setProfissional(agenda.getProfissional());
         existente.setEmpresa(agenda.getEmpresa());
+        existente.setObservacoes(agenda.getObservacoes());
 
         return agendaRepository.save(existente);
     }

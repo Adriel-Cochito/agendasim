@@ -15,11 +15,12 @@ public class AgendaMapper {
             agenda.getTelefoneCliente(),
             agenda.getDataHora(),
             agenda.getStatus(),
+            agenda.getObservacoes(),
             agenda.getProfissional().getId(),
             agenda.getProfissional().getNome(),
             agenda.getServico().getId(),
             agenda.getServico().getTitulo()
-        );
+                   );
     }
 
     public static AgendaClienteDTO toClienteDAO(Agenda agenda) {

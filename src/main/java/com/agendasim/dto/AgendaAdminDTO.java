@@ -16,6 +16,7 @@ public class AgendaAdminDTO {
     private String telefoneCliente;
     private Instant dataHora;
     private String status;
+    private String observacoes;
     private Long profissionalId;
     private String profissionalNome;
     private Long servicoId;
