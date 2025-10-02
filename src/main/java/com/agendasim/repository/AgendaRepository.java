@@ -112,4 +112,26 @@ public interface AgendaRepository extends JpaRepository<Agenda, Long> {
     @Query("SELECT a FROM Agenda a WHERE a.empresa.id = :empresaId AND a.profissional.id = :profissionalId AND a.dataHora BETWEEN :inicio AND :fim")
     List<Agenda> findByEmpresaProfissionalEData(@Param("empresaId") Long empresaId, @Param("profissionalId") Long profissionalId, @Param("inicio") Instant inicio, @Param("fim") Instant fim);
 
+    // Métodos para LGPD - Anonimização de Clientes
+    List<Agenda> findByProfissionalId(Long profissionalId);
+    
+    @Query("SELECT a FROM Agenda a WHERE a.profissional.id = :profissionalId AND a.dataHora > :dataLimite")
+    List<Agenda> findByProfissionalIdAndDataHoraAfter(@Param("profissionalId") Long profissionalId, @Param("dataLimite") java.time.LocalDateTime dataLimite);
+    
+    /**
+     * Buscar agendamentos por nome e telefone do cliente
+     * Usado para anonimização global de clientes
+     */
+    List<Agenda> findByNomeClienteAndTelefoneCliente(String nomeCliente, String telefoneCliente);
+    
+    /**
+     * Buscar agendamentos por nome do cliente (busca parcial)
+     */
+    List<Agenda> findByNomeClienteContainingIgnoreCase(String nomeCliente);
+    
+    /**
+     * Buscar agendamentos por telefone do cliente
+     */
+    List<Agenda> findByTelefoneCliente(String telefoneCliente);
+
 }

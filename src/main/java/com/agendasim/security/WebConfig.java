@@ -1,6 +1,7 @@
 package com.agendasim.security;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -8,8 +9,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
-    public void addCorsMappings(CorsRegistry registry) {
+    public void addCorsMappings(@NonNull CorsRegistry registry) {
         registry.addMapping("/**") // permite CORS para todas as rotas
+                .allowedOriginPatterns("*")  // Permite qualquer origem (mais flexível)
                 .allowedOrigins(
                     "http://localhost:3000",
                     "http://127.0.0.1:3000",
@@ -19,6 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
                 ) 
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
                 .allowedHeaders("*")          // Permitir todos os headers
+                .exposedHeaders("*")         // Expor todos os headers na resposta
                 .allowCredentials(true)
                 .maxAge(3600);               // Cache do preflight por 1 hora
     }

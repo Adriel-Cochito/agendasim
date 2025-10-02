@@ -101,7 +101,14 @@ public class SecurityConfig {
                                                                 // ENDPOINTS PÚBLICOS PARA AGENDAMENTO - ADICIONAR ESTAS
                                                                 // LINHAS:
                                                                 "/disponibilidades/profissional/data",
-                                                                "/agendas/admin/data")
+                                                                "/agendas/admin/data",
+                                                                // ENDPOINTS LGPD PÚBLICOS
+                                                                "/api/lgpd/clientes/**",
+                                                                "/api/lgpd/termos/ativo",
+                                                                "/api/lgpd/politicas/ativa",
+                                                                // ROTAS ALTERNATIVAS PARA FRONTEND
+                                                                "/api/termos/ativo",
+                                                                "/api/politicas/ativa")
                                                 .permitAll()
 
                                                 // EMPRESAS - apenas OWNER (exceto criação com owner que é pública)
@@ -148,6 +155,30 @@ public class SecurityConfig {
                                                 .hasAnyRole("OWNER", "ADMIN")
                                                 .requestMatchers(HttpMethod.DELETE, "/servicos/**")
                                                 .hasAnyRole("OWNER", "ADMIN")
+
+                                                // LGPD - Consentimentos (autenticado)
+                                                .requestMatchers("/api/consentimentos/**")
+                                                .hasAnyRole("OWNER", "ADMIN", "USER")
+                                                .requestMatchers("/api/lgpd/consentimentos/**")
+                                                .hasAnyRole("OWNER", "ADMIN", "USER")
+                                                
+                                                // LGPD - Termos e Políticas (aceitar - autenticado)
+                                                .requestMatchers(HttpMethod.POST, "/api/lgpd/termos/aceitar")
+                                                .hasAnyRole("OWNER", "ADMIN", "USER")
+                                                .requestMatchers(HttpMethod.POST, "/api/lgpd/politicas/aceitar")
+                                                .hasAnyRole("OWNER", "ADMIN", "USER")
+                                                
+                                                // ROTAS ALTERNATIVAS PARA FRONTEND (autenticado)
+                                                .requestMatchers("/api/termos/**")
+                                                .hasAnyRole("OWNER", "ADMIN", "USER")
+                                                .requestMatchers("/api/politicas/**")
+                                                .hasAnyRole("OWNER", "ADMIN", "USER")
+                                                
+                                                // SUPORTE - endpoints públicos e autenticados
+                                                .requestMatchers("/api/suporte/publico/**")
+                                                .permitAll()
+                                                .requestMatchers("/api/suporte/**")
+                                                .hasAnyRole("OWNER", "ADMIN", "USER")
 
                                                 // Qualquer outra requisição exige autenticação
                                                 .anyRequest().authenticated())

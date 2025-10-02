@@ -10,9 +10,9 @@ public class AgendasimApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(AgendasimApplication.class, args);
 
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String senhaCriptografada = encoder.encode("asd123");
-        System.out.println(senhaCriptografada);
+        // BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        // String senhaCriptografada = encoder.encode("asd123");
+        // System.out.println(senhaCriptografada);
 	}
 
 }
