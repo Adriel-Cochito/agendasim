@@ -1,8 +1,12 @@
+# Arquivos de ajuda
 HELP.md
+
+# Build outputs
 target/
+**/target/
+
+# Maven wrapper
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
 
 ### STS ###
 .apt_generated
