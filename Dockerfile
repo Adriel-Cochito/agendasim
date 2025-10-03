@@ -1,7 +1,7 @@
 # ==============================================================================
 # STAGE 1: Build da aplicação
 # ==============================================================================
-FROM openjdk:21-jdk-slim as builder
+FROM eclipse-temurin:21-jdk as builder
 
 # Define o diretório de trabalho
 WORKDIR /app
@@ -33,7 +33,7 @@ RUN ./mvnw clean package -DskipTests -Dmaven.compiler.showDeprecation=false
 # ==============================================================================
 # STAGE 2: Runtime da aplicação
 # ==============================================================================
-FROM openjdk:21-jre-slim
+FROM eclipse-temurin:21-jre
 
 # Instala dependências de runtime
 RUN apt-get update && apt-get install -y \
