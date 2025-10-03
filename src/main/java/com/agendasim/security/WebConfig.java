@@ -17,7 +17,8 @@ public class WebConfig implements WebMvcConfigurer {
                     "http://127.0.0.1:3000",
                     "http://localhost:5173",
                     "http://localhost:3001",  // Caso esteja rodando em outra porta
-                    "https://agendasim.netlify.app"  // Frontend em produção
+                    "https://agendesim.netlify.app",  // Frontend em produção
+                    "https://agendesim.com" // Frontend em produção
                 ) 
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
                 .allowedHeaders("*")          // Permitir todos os headers
