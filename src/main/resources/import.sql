@@ -1,5 +1,5 @@
 -- EMPRESA
-INSERT INTO empresas (nome, email, telefone, cnpj, ativo, created_at) VALUES ('Salão de Beleza', 'salao@exemplo.com', '+55 31 99999-8888', '12.345.678/0001-99', true, NOW());
+INSERT INTO empresas (nome, email, telefone, cnpj, nome_unico, ativo, created_at) VALUES ('Salão de Beleza', 'salao@exemplo.com', '+55 31 99999-8888', '12.345.678/0001-99', 'salaodebeleza', true, NOW());
 
 -- PROFISSIONAL
 INSERT INTO profissionais (nome, email, senha, perfil, google_access_token, google_refresh_token, empresa_id, ativo, created_at) VALUES ('Adriel Cochito', 'adrielcochito@gmail.com', '$2a$10$eJlE.0VdkiUH8AgN/8PqsOb8tNsYHIVVGPpxFOZAciGvAX5IgIBoq', 'OWNER', null, null, 1, true, NOW());

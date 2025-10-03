@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/empresas")
@@ -46,5 +47,16 @@ public class EmpresaController {
     @DeleteMapping("/{id}")
     public void excluir(@PathVariable Long id) {
         empresaService.excluir(id);
+    }
+
+    @GetMapping("/verificar-nome-unico/{nomeUnico}")
+    public Map<String, Boolean> verificarNomeUnicoDisponivel(@PathVariable String nomeUnico) {
+        boolean disponivel = empresaService.isNomeUnicoDisponivel(nomeUnico);
+        return Map.of("disponivel", disponivel);
+    }
+
+    @GetMapping("/nome-unico/{nomeUnico}")
+    public Empresa buscarPorNomeUnico(@PathVariable String nomeUnico) {
+        return empresaService.buscarPorNomeUnico(nomeUnico);
     }
 }

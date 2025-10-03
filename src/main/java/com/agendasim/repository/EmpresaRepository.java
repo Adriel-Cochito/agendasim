@@ -10,5 +10,7 @@ import com.agendasim.model.Empresa;
 @Repository
 public interface EmpresaRepository extends JpaRepository<Empresa, Long> {
     Optional<Empresa> findByEmail(String email);
+    Optional<Empresa> findByNomeUnico(String nomeUnico);
+    boolean existsByNomeUnico(String nomeUnico);
 }
 

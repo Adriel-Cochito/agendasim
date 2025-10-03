@@ -98,6 +98,8 @@ public class SecurityConfig {
                                                                 "/v3/api-docs/**",
                                                                 "/h2-console/**",
                                                                 "/empresas/com-owner",
+                                                                "/empresas/verificar-nome-unico/**",
+                                                                "/empresas/nome-unico/**",
                                                                 // ENDPOINTS PÚBLICOS PARA AGENDAMENTO - ADICIONAR ESTAS
                                                                 // LINHAS:
                                                                 "/disponibilidades/profissional/data",

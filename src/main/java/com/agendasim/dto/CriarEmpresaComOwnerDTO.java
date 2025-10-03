@@ -24,6 +24,11 @@ public class CriarEmpresaComOwnerDTO {
     @Pattern(regexp = "^$|\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}", message = "CNPJ inválido. Formato esperado: 00.000.000/0000-00 ou deixe em branco")
     private String cnpjEmpresa;
 
+    @NotBlank(message = "O nome único da empresa é obrigatório")
+    @Size(min = 3, max = 50, message = "O nome único deve ter entre 3 e 50 caracteres")
+    @Pattern(regexp = "^[a-z0-9]+$", message = "O nome único deve conter apenas letras minúsculas e números, sem espaços ou caracteres especiais")
+    private String nomeUnicoEmpresa;
+
     private Boolean ativoEmpresa = true;
 
     // Dados do Profissional Owner

@@ -28,6 +28,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         "/auth/",
         "/agendamentos/",
         "/empresas/com-owner",
+        "/empresas/verificar-nome-unico/",
+        "/empresas/nome-unico/",
         "/swagger-ui/",
         "/v3/api-docs/",
         "/h2-console/"

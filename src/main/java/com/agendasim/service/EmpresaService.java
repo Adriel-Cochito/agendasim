@@ -3,6 +3,7 @@ package com.agendasim.service;
 import com.agendasim.dto.CriarEmpresaComOwnerDTO;
 import com.agendasim.dto.EmpresaComOwnerResponseDTO;
 import com.agendasim.exception.EmailJaCadastradoException;
+import com.agendasim.exception.NomeUnicoJaCadastradoException;
 import com.agendasim.exception.RecursoNaoEncontradoException;
 import com.agendasim.model.Empresa;
 import com.agendasim.model.Profissional;
@@ -42,18 +43,22 @@ public class EmpresaService {
         // 1. VALIDAÇÃO PRÉVIA: Verificar se o email do profissional já existe
         // Esta verificação acontece ANTES de criar a empresa
         validarEmailUnico(dto.getEmailProfissional());
+        
+        // 2. VALIDAÇÃO PRÉVIA: Verificar se o nome único da empresa já existe
+        validarNomeUnicoDisponivel(dto.getNomeUnicoEmpresa());
 
-        // 2. Criar a empresa (somente após validação do email)
+        // 3. Criar a empresa (somente após validação do email e nome único)
         Empresa empresa = new Empresa();
         empresa.setNome(dto.getNomeEmpresa());
         empresa.setEmail(dto.getEmailEmpresa());
         empresa.setTelefone(dto.getTelefoneEmpresa());
         empresa.setCnpj(dto.getCnpjEmpresa());
+        empresa.setNomeUnico(dto.getNomeUnicoEmpresa());
         empresa.setAtivo(dto.getAtivoEmpresa());
 
         Empresa empresaCriada = empresaRepository.save(empresa);
 
-        // 3. Criar o profissional owner usando o ID da empresa criada
+        // 4. Criar o profissional owner usando o ID da empresa criada
         Profissional profissional = new Profissional();
         profissional.setNome(dto.getNomeProfissional());
         profissional.setEmail(dto.getEmailProfissional());
@@ -87,6 +92,37 @@ public class EmpresaService {
         }
     }
 
+    /**
+     * Valida se o nome único não está em uso por outra empresa
+     * @param nomeUnico Nome único a ser validado
+     * @throws NomeUnicoJaCadastradoException se o nome único já estiver em uso
+     */
+    private void validarNomeUnicoDisponivel(String nomeUnico) {
+        if (empresaRepository.existsByNomeUnico(nomeUnico)) {
+            throw new NomeUnicoJaCadastradoException(nomeUnico);
+        }
+    }
+
+    /**
+     * Verifica se um nome único está disponível
+     * @param nomeUnico Nome único a ser verificado
+     * @return true se disponível, false se já existe
+     */
+    public boolean isNomeUnicoDisponivel(String nomeUnico) {
+        return !empresaRepository.existsByNomeUnico(nomeUnico);
+    }
+
+    /**
+     * Busca empresa por nome único
+     * @param nomeUnico Nome único da empresa
+     * @return Empresa encontrada
+     * @throws RecursoNaoEncontradoException se empresa não for encontrada
+     */
+    public Empresa buscarPorNomeUnico(String nomeUnico) {
+        return empresaRepository.findByNomeUnico(nomeUnico)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Empresa com nome único '" + nomeUnico + "' não encontrada"));
+    }
+
     public Empresa buscarPorId(Long id) {
         return empresaRepository.findById(id)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Empresa id=" + id + " não encontrada"));
@@ -102,10 +138,16 @@ public class EmpresaService {
     public Empresa atualizar(Long id, Empresa empresa) {
         Empresa existente = buscarPorId(id);
         
+        // Validar nome único se foi alterado
+        if (!existente.getNomeUnico().equals(empresa.getNomeUnico())) {
+            validarNomeUnicoDisponivel(empresa.getNomeUnico());
+        }
+        
         existente.setNome(empresa.getNome());
         existente.setEmail(empresa.getEmail());
         existente.setTelefone(empresa.getTelefone());
         existente.setCnpj(empresa.getCnpj());
+        existente.setNomeUnico(empresa.getNomeUnico());
         existente.setAtivo(empresa.getAtivo());
         
         return empresaRepository.save(existente);
