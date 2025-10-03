@@ -97,6 +97,8 @@ public class SecurityConfig {
                                                                 "/swagger-ui/**",
                                                                 "/v3/api-docs/**",
                                                                 "/h2-console/**",
+                                                                "/actuator/**", // <-- ADICIONE ESTA LINHA
+                                                                "/actuator/health", // <-- ADICIONE ESTA LINHA
                                                                 "/empresas/com-owner",
                                                                 "/empresas/verificar-nome-unico/**",
                                                                 "/empresas/nome-unico/**",
@@ -163,19 +165,19 @@ public class SecurityConfig {
                                                 .hasAnyRole("OWNER", "ADMIN", "USER")
                                                 .requestMatchers("/api/lgpd/consentimentos/**")
                                                 .hasAnyRole("OWNER", "ADMIN", "USER")
-                                                
+
                                                 // LGPD - Termos e Políticas (aceitar - autenticado)
                                                 .requestMatchers(HttpMethod.POST, "/api/lgpd/termos/aceitar")
                                                 .hasAnyRole("OWNER", "ADMIN", "USER")
                                                 .requestMatchers(HttpMethod.POST, "/api/lgpd/politicas/aceitar")
                                                 .hasAnyRole("OWNER", "ADMIN", "USER")
-                                                
+
                                                 // ROTAS ALTERNATIVAS PARA FRONTEND (autenticado)
                                                 .requestMatchers("/api/termos/**")
                                                 .hasAnyRole("OWNER", "ADMIN", "USER")
                                                 .requestMatchers("/api/politicas/**")
                                                 .hasAnyRole("OWNER", "ADMIN", "USER")
-                                                
+
                                                 // SUPORTE - endpoints públicos e autenticados
                                                 .requestMatchers("/api/suporte/publico/**")
                                                 .permitAll()
