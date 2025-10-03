@@ -5,36 +5,46 @@
 # Documentation
 README.md
 HELP.md
+TESTES.md
+*.md
+
+# Environment files
+.env*
+!.env.example
 
 # IDE
 .idea
 .vscode
 *.iml
-*.ipr
 *.iws
-
-# Build artifacts
-target/
-!target/agendasim-0.0.1-SNAPSHOT.jar
-
-# Logs
-*.log
-logs/
+*.ipr
+.project
+.classpath
+.settings
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Environment files
-.env
-.env.local
-.env.production
+# Logs
+*.log
+logs/
 
-# H2 database files (will be created in container)
+# Target (será reconstruído no container)
+target/
+!target/*.jar
+
+# Test files
+src/test/
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Scripts
+*.sh
+*.bat
+
+# Data
 data/
-*.db
-*.trace.db
-*.lock.db
-
-# Maven wrapper (will be copied separately)
-.mvn/wrapper/maven-wrapper.jar

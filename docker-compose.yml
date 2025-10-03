@@ -1,14 +1,96 @@
 version: '3.8'
 
 services:
-  agendasim-api:
-    build: .
-    ports:
-      - "8080:8080"
-    environment:
-      - SPRING_PROFILES_ACTIVE=prod
-      - JWT_SECRET=${JWT_SECRET}
-      - DB_PASSWORD=${DB_PASSWORD}
-    volumes:
-      - ./data:/app/data
+  # ============================================================================
+  # PostgreSQL Database
+  # ============================================================================
+  postgres:
+    image: postgres:15-alpine
+    container_name: agendasim-postgres
     restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-agendasim}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    networks:
+      - agendasim-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-agendasim}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # ============================================================================
+  # AgendaSim API
+  # ============================================================================
+  agendasim-api:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: agendasim-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Spring Profiles
+      SPRING_PROFILES_ACTIVE: prod
+      
+      # Database Configuration
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-agendasim}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      
+      # JWT Configuration
+      JWT_SECRET: ${JWT_SECRET}
+      
+      # Server Configuration
+      PORT: 8080
+      
+      # JVM Options
+      JAVA_OPTS: >
+        -XX:+UseContainerSupport
+        -XX:MaxRAMPercentage=75.0
+        -XX:+UseG1GC
+        -XX:+UseStringDeduplication
+        -Djava.security.egd=file:/dev/./urandom
+    ports:
+      - "${API_PORT:-8080}:8080"
+    networks:
+      - agendasim-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    # Recursos limitados para evitar consumo excessivo
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+
+# ============================================================================
+# Networks
+# ============================================================================
+networks:
+  agendasim-network:
+    driver: bridge
+    name: agendasim-network
+
+# ============================================================================
+# Volumes
+# ============================================================================
+volumes:
+  postgres_data:
+    driver: local
+    name: agendasim-postgres-data
